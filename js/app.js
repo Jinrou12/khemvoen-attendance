@@ -7,11 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Initialize State & Data
     let classes = getStoredData('buddhist_classes', DEFAULT_CLASSES);
     let students = getStoredData('buddhist_students', generateInitialStudents());
-    let attendanceRecords = getStoredData('buddhist_attendance', null);
-    if (!attendanceRecords || Object.keys(attendanceRecords).length === 0) {
-        attendanceRecords = generateSampleAttendance(students);
-        setStoredData('buddhist_attendance', attendanceRecords);
-    }
+    let attendanceRecords = getStoredData('buddhist_attendance', {});
 
     // Cache DOM Elements
     const tabBtns = document.querySelectorAll('.tab-btn');
@@ -656,6 +652,16 @@ document.addEventListener('DOMContentLoaded', () => {
             buddhistTable.style.zoom = '1.0';
             buddhistTable.style.transform = '';
             showToast('↺ បានកំណត់មកទំហំដើម (100%)');
+    const btnClearAttendance = document.getElementById('btn-clear-attendance');
+    if (btnClearAttendance) {
+        btnClearAttendance.addEventListener('click', () => {
+            if (confirm('តើអ្នកប្រាកដជាចង់សម្អាតទិន្នន័យអវត្តមានទាំងអស់ឱ្យនៅប្រអបទទេមែនទេ?')) {
+                attendanceRecords = {};
+                setStoredData('buddhist_attendance', {});
+                loadDailyAttendance();
+                renderMonthlyReport();
+                showToast('🗑️ បានសម្អាតទិន្នន័យទាំងអស់ឱ្យនៅប្រអបទទេ!');
+            }
         });
     }
 
