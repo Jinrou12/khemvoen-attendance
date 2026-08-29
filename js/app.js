@@ -428,22 +428,37 @@ document.addEventListener('DOMContentLoaded', () => {
             ? [selectedDay]
             : Array.from({ length: daysInMonth }, (_, i) => i + 1);
 
+        // Helper function for rendering badge
+        function renderStatusBadge(status) {
+            if (status === 'absent') return `<span class="cell-badge cell-a" title="អវត្តមាន (Absent)">A</span>`;
+            if (status === 'leave') return `<span class="cell-badge cell-p" title="ច្បាប់ (Permission)">P</span>`;
+            if (status === 'late') return `<span class="cell-badge cell-l" title="យឺត (Late)">L</span>`;
+            return '-';
+        }
+
         // Build Table Header
         let headerHTML = `
             <tr>
-                <th style="width: 50px;">ល.រ</th>
-                <th style="min-width: 170px;" class="text-left">គោរមងេ-នាម</th>
+                <th class="col-no">ល.រ</th>
+                <th class="col-name text-left">គោតនាម-នាម</th>
         `;
 
-        daysToDisplay.forEach(d => {
-            headerHTML += `<th style="width: 45px;">${toKhmerNum(d)}</th>`;
-        });
+        if (monthlyReportViewMode === 'single') {
+            headerHTML += `
+                <th style="min-width: 75px;" title="វេនព្រឹក">☀️ ព្រឹក</th>
+                <th style="min-width: 75px;" title="វេនល្ងាច">🌙 ល្ងាច</th>
+            `;
+        } else {
+            daysToDisplay.forEach(d => {
+                headerHTML += `<th class="col-day">${toKhmerNum(d)}</th>`;
+            });
+        }
 
         headerHTML += `
-                <th style="min-width: 50px;" title="វត្តមាន">វត្ត</th>
-                <th style="min-width: 50px;" title="ច្បាប់">ច្បាប់</th>
-                <th style="min-width: 50px;" title="អវត្តមាន">អវត្ត</th>
-                <th style="min-width: 50px;" title="យឺត">យឺត</th>
+                <th class="col-summary" title="វត្តមាន">វត្ត</th>
+                <th class="col-summary" title="ច្បាប់">ច្បាប់</th>
+                <th class="col-summary" title="អវត្តមាន">អវត្ត</th>
+                <th class="col-summary" title="យឺត">យឺត</th>
             </tr>
         `;
         monthlyTableHeader.innerHTML = headerHTML;
@@ -455,6 +470,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let absentCount = 0;
             let lateCount = 0;
             const dayStatuses = {};
+            const singleDayDetail = { morning: null, evening: null };
 
             for (let d = 1; d <= daysInMonth; d++) {
                 const dayStr = String(d).padStart(2, '0');
@@ -466,6 +482,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const mStatus = (attendanceRecords[mKey] && attendanceRecords[mKey][student.id]) || null;
                 const eStatus = (attendanceRecords[eKey] && attendanceRecords[eKey][student.id]) || null;
+
+                if (d === selectedDay) {
+                    singleDayDetail.morning = mStatus;
+                    singleDayDetail.evening = eStatus;
+                }
 
                 [mStatus, eStatus].forEach(st => {
                     if (st === 'present') presentCount++;
@@ -493,7 +514,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 leaveCount,
                 absentCount,
                 lateCount,
-                dayStatuses
+                dayStatuses,
+                singleDayDetail
             };
         });
 
@@ -518,19 +540,26 @@ document.addEventListener('DOMContentLoaded', () => {
         let bodyHTML = '';
         studentDataList.forEach((item, idx) => {
             let rowDaysHTML = '';
-            daysToDisplay.forEach(d => {
-                rowDaysHTML += `<td>${item.dayStatuses[d] || '-'}</td>`;
-            });
+            if (monthlyReportViewMode === 'single') {
+                rowDaysHTML = `
+                    <td>${renderStatusBadge(item.singleDayDetail.morning)}</td>
+                    <td>${renderStatusBadge(item.singleDayDetail.evening)}</td>
+                `;
+            } else {
+                daysToDisplay.forEach(d => {
+                    rowDaysHTML += `<td class="col-day">${item.dayStatuses[d] || '-'}</td>`;
+                });
+            }
 
             bodyHTML += `
                 <tr>
-                    <td>${toKhmerNum(idx + 1)}</td>
-                    <td class="text-left"><strong>${item.student.name}</strong></td>
+                    <td class="col-no">${toKhmerNum(idx + 1)}</td>
+                    <td class="col-name text-left"><strong>${item.student.name}</strong></td>
                     ${rowDaysHTML}
-                    <td style="color: var(--status-present); font-weight: bold;">${toKhmerNum(item.presentCount)}</td>
-                    <td style="color: var(--status-leave); font-weight: bold;">${toKhmerNum(item.leaveCount)}</td>
-                    <td style="color: var(--status-absent); font-weight: bold;">${toKhmerNum(item.absentCount)}</td>
-                    <td style="color: var(--status-late); font-weight: bold;">${toKhmerNum(item.lateCount)}</td>
+                    <td class="col-summary" style="color: var(--status-present); font-weight: bold;">${toKhmerNum(item.presentCount)}</td>
+                    <td class="col-summary" style="color: var(--status-leave); font-weight: bold;">${toKhmerNum(item.leaveCount)}</td>
+                    <td class="col-summary" style="color: var(--status-absent); font-weight: bold;">${toKhmerNum(item.absentCount)}</td>
+                    <td class="col-summary" style="color: var(--status-late); font-weight: bold;">${toKhmerNum(item.lateCount)}</td>
                 </tr>
             `;
         });
@@ -542,6 +571,28 @@ document.addEventListener('DOMContentLoaded', () => {
     if (monthlyDatePicker) monthlyDatePicker.addEventListener('change', renderMonthlyReport);
     if (monthlySearchName) monthlySearchName.addEventListener('input', renderMonthlyReport);
 
+    // Table Quick Scroll Jump Listeners (ថ្ងៃទី១, កណ្ដាលខែ, ថ្ងៃបញ្ចប់ខែ)
+    const tableResponsive = document.querySelector('.table-responsive');
+    const btnScrollStart = document.getElementById('btn-scroll-start');
+    const btnScrollMid = document.getElementById('btn-scroll-mid');
+    const btnScrollEnd = document.getElementById('btn-scroll-end');
+
+    if (btnScrollStart && tableResponsive) {
+        btnScrollStart.addEventListener('click', () => {
+            tableResponsive.scrollTo({ left: 0, behavior: 'smooth' });
+        });
+    }
+    if (btnScrollMid && tableResponsive) {
+        btnScrollMid.addEventListener('click', () => {
+            tableResponsive.scrollTo({ left: Math.floor(tableResponsive.scrollWidth / 2 - tableResponsive.clientWidth / 2), behavior: 'smooth' });
+        });
+    }
+    if (btnScrollEnd && tableResponsive) {
+        btnScrollEnd.addEventListener('click', () => {
+            tableResponsive.scrollTo({ left: tableResponsive.scrollWidth, behavior: 'smooth' });
+        });
+    }
+
     // Initial render on page load
     renderMonthlyReport();
 
@@ -552,6 +603,45 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     if (btnPrintReport) btnPrintReport.addEventListener('click', () => window.print());
+
+    // Fullscreen Toggle Handler (⛶ ពេញអេក្រង់)
+    const btnFullscreenToggle = document.getElementById('btn-fullscreen-toggle');
+    const tabMonthlyCard = document.querySelector('#tab-monthly .buddhist-card');
+
+    if (btnFullscreenToggle && tabMonthlyCard) {
+        btnFullscreenToggle.addEventListener('click', () => {
+            const isFs = document.fullscreenElement || document.webkitFullscreenElement || tabMonthlyCard.classList.contains('is-fullscreen-card');
+
+            if (!isFs) {
+                if (tabMonthlyCard.requestFullscreen) {
+                    tabMonthlyCard.requestFullscreen().catch(() => {
+                        tabMonthlyCard.classList.add('is-fullscreen-card');
+                    });
+                } else if (tabMonthlyCard.webkitRequestFullscreen) {
+                    tabMonthlyCard.webkitRequestFullscreen();
+                } else {
+                    tabMonthlyCard.classList.add('is-fullscreen-card');
+                }
+                tabMonthlyCard.classList.add('is-fullscreen-card');
+                btnFullscreenToggle.innerHTML = '🗗 ចាកចេញ';
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().catch(() => {});
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                }
+                tabMonthlyCard.classList.remove('is-fullscreen-card');
+                btnFullscreenToggle.innerHTML = '⛶ ពេញអេក្រង់';
+            }
+        });
+
+        document.addEventListener('fullscreenchange', () => {
+            if (!document.fullscreenElement) {
+                tabMonthlyCard.classList.remove('is-fullscreen-card');
+                btnFullscreenToggle.innerHTML = '⛶ ពេញអេក្រង់';
+            }
+        });
+    }
 
     // -------------------------------------------------------------
     // TAB 3: Attendance Statistics Dashboard ( 1 Day, 1 Week, 1 Month )
