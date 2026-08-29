@@ -599,11 +599,13 @@ document.addEventListener('DOMContentLoaded', () => {
             buddhistTable.classList.toggle('table-fit-all-days');
             const isFit = buddhistTable.classList.contains('table-fit-all-days');
             if (isFit) {
-                buddhistTable.style.zoom = '';
-                buddhistTable.style.transform = '';
-                showToast('✨ បានសម្រួលបង្ហាញ ៣១ ថ្ងៃ ពេញអេក្រង់!');
+                currentZoomScale = 1.2;
+                buddhistTable.style.zoom = '1.2';
+                showToast('🔍 Zoom In ពង្រីកធំច្បាស់ៗ 120%');
             } else {
-                showToast('ត្រឡប់មកទំហំធម្មតាវិញ');
+                currentZoomScale = 1.0;
+                buddhistTable.style.zoom = '1.0';
+                showToast('↺ ត្រឡប់មកទំហំធម្មតាវិញ (100%)');
             }
         });
     }

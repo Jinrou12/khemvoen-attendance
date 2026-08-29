@@ -1123,130 +1123,15 @@ body {
     text-align: center;
 }
 
-/* Auto-Fit Mode: Fits all 31 days from Day 1 to Day 31 on 100% mobile screen width */
+/* Comfortable Readable Table Layout */
 .buddhist-table.table-fit-all-days {
-    min-width: 100% !important;
-    width: 100% !important;
-    font-size: 0.65rem !important;
-    table-layout: fixed !important;
+    min-width: 900px !important;
+    width: max-content !important;
+    font-size: 0.88rem !important;
+    zoom: 1.12 !important;
 }
 
-.buddhist-table.table-fit-all-days .col-no {
-    width: 22px !important;
-    min-width: 22px !important;
-    max-width: 22px !important;
-    padding: 3px 0 !important;
-    font-size: 0.62rem !important;
-}
-
-.buddhist-table.table-fit-all-days .col-name {
-    min-width: 65px !important;
-    max-width: 75px !important;
-    padding: 3px 2px !important;
-    font-size: 0.65rem !important;
-}
-
-.buddhist-table.table-fit-all-days th:nth-child(1),
-.buddhist-table.table-fit-all-days td:nth-child(1) {
-    left: 0 !important;
-}
-
-.buddhist-table.table-fit-all-days th:nth-child(2),
-.buddhist-table.table-fit-all-days td:nth-child(2) {
-    left: 22px !important;
-}
-
-.buddhist-table.table-fit-all-days .col-day {
-    width: auto !important;
-    min-width: 0 !important;
-    padding: 3px 0 !important;
-    font-size: 0.58rem !important;
-}
-
-.buddhist-table.table-fit-all-days .col-summary {
-    width: 16px !important;
-    min-width: 16px !important;
-    padding: 3px 0 !important;
-    font-size: 0.58rem !important;
-}
-
-.buddhist-table.table-fit-all-days .cell-badge {
-    width: 14px !important;
-    height: 14px !important;
-    font-size: 0.55rem !important;
-    border-radius: 3px !important;
-}
-
-.buddhist-table th {
-    background: rgba(35, 18, 12, 0.98);
-    color: var(--gold-bright);
-    font-family: var(--font-title);
-    font-size: 0.82rem;
-    position: sticky;
-    top: 0;
-    z-index: 4;
-}
-
-/* Compact Table Column Classes */
-.buddhist-table .col-no {
-    width: 38px;
-    min-width: 38px;
-    max-width: 38px;
-    font-size: 0.8rem;
-}
-
-.buddhist-table .col-name {
-    min-width: 140px;
-    max-width: 160px;
-    padding: 6px 8px;
-    font-size: 0.88rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.buddhist-table .col-day {
-    width: 27px;
-    min-width: 27px;
-    max-width: 28px;
-    padding: 5px 1px;
-    font-size: 0.78rem;
-}
-
-.buddhist-table .col-summary {
-    width: 36px;
-    min-width: 36px;
-    padding: 5px 2px;
-    font-size: 0.82rem;
-}
-
-/* Sticky Left Columns for Tab 1 (ល.រ & គោតនាម-នាម) */
-.buddhist-table th:nth-child(1),
-.buddhist-table td:nth-child(1) {
-    position: sticky;
-    left: 0;
-    z-index: 5;
-    background: rgba(22, 11, 7, 0.98);
-    border-right: 1px solid rgba(212, 175, 55, 0.3);
-}
-
-.buddhist-table th:nth-child(2),
-.buddhist-table td:nth-child(2) {
-    position: sticky;
-    left: 38px;
-    z-index: 5;
-    background: rgba(22, 11, 7, 0.98);
-    border-right: 2px solid var(--gold-primary);
-    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.6);
-}
-
-.buddhist-table th:nth-child(1),
-.buddhist-table th:nth-child(2) {
-    z-index: 10;
-    background: rgba(38, 19, 12, 0.99);
-}
-
-/* Mobile Responsive Optimization (< 600px): Full Name Display + Smooth Days Scroll */
+/* Mobile Responsive Optimization (< 600px): Comfortable Large Text + Sticky Full Name */
 @media (max-width: 600px) {
     .table-responsive {
         overflow-x: auto;
@@ -1254,24 +1139,27 @@ body {
     }
 
     .buddhist-table {
-        min-width: 840px !important;
+        min-width: 880px !important;
         width: max-content !important;
-        table-layout: auto !important;
+        font-size: 0.85rem !important;
     }
 
     .buddhist-table .col-no {
-        width: 26px !important;
-        min-width: 26px !important;
-        max-width: 26px !important;
-        font-size: 0.75rem !important;
-        padding: 4px 2px !important;
+        width: 28px !important;
+        min-width: 28px !important;
+        max-width: 28px !important;
+        font-size: 0.8rem !important;
+        padding: 6px 2px !important;
+        font-weight: bold;
     }
 
     .buddhist-table .col-name {
-        min-width: 150px !important;
+        min-width: 155px !important;
         max-width: none !important;
-        padding: 5px 8px !important;
-        font-size: 0.82rem !important;
+        padding: 6px 8px !important;
+        font-size: 0.86rem !important;
+        font-weight: 700 !important;
+        color: var(--text-gold) !important;
         white-space: nowrap !important;
         overflow: visible !important;
         text-overflow: clip !important;
@@ -1284,25 +1172,26 @@ body {
 
     .buddhist-table th:nth-child(2),
     .buddhist-table td:nth-child(2) {
-        left: 26px !important;
-        box-shadow: 4px 0 10px rgba(0, 0, 0, 0.7) !important;
+        left: 28px !important;
+        box-shadow: 4px 0 10px rgba(0, 0, 0, 0.75) !important;
     }
 
     .buddhist-table .col-day {
-        width: 22px !important;
-        min-width: 22px !important;
-        max-width: 22px !important;
-        padding: 4px 1px !important;
-        font-size: 0.72rem !important;
-        font-weight: 600;
+        width: 24px !important;
+        min-width: 24px !important;
+        max-width: 25px !important;
+        padding: 5px 2px !important;
+        font-size: 0.78rem !important;
+        font-weight: bold !important;
     }
 
     .buddhist-table .cell-badge {
-        width: 15px !important;
-        height: 15px !important;
-        font-size: 0.62rem !important;
-        border-radius: 3px !important;
-        line-height: 15px !important;
+        width: 17px !important;
+        height: 17px !important;
+        font-size: 0.68rem !important;
+        border-radius: 4px !important;
+        line-height: 17px !important;
+        font-weight: bold !important;
     }
 }
 
