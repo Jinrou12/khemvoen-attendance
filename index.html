@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ប្រព័ន្ធគ្រប់គ្រងអវត្តមានថ្វាយបង្គំ - វត្តខេមរវ័ន (បឹងស្នួល)</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <!-- Background Bodhi Leaf Particles -->
+    <div id="bodhi-particles"></div>
+
+    <div class="app-container">
+        
+        <!-- Traditional Buddhist Header -->
+        <header class="buddhist-header">
+            <div class="bodhi-bg-watermark"></div>
+
+            <!-- Official Wat Khemaravan Golden Logo -->
+            <img src="assets/logo.png" alt="វត្តខេមរវ័ន (បឹងស្នួល)" class="header-logo-art">
+
+            <h1 class="buddhist-title">☸️ ប្រព័ន្ធស្រង់អវត្តមានថ្វាយបង្គំ ☸️</h1>
+            <p class="buddhist-subtitle">វត្តខេមរវ័ន (បឹងស្នួល) • សង្កាត់បឹងកុកមាស ក្រុងកំពង់ចាម ខេត្តកំពង់ចាម</p>
+        </header>
+
+        <!-- Main Navigation Tabs (3 Tabs) -->
+        <nav class="tabs-navigation" role="tablist">
+            <button type="button" class="tab-btn active" data-tab="tab-daily" role="tab" id="tab-btn-daily">
+                <span class="tab-icon">📝</span>
+                <span>ផ្ទាំងទី២៖ ស្រង់អវត្តមានប្រចាំថ្ងៃ</span>
+            </button>
+            <button type="button" class="tab-btn" data-tab="tab-monthly" role="tab" id="tab-btn-monthly">
+                <span class="tab-icon">📊</span>
+                <span>ផ្ទាំងទី១៖ តារាងអវត្តមាន ១ខែ</span>
+            </button>
+            <button type="button" class="tab-btn" data-tab="tab-stats" role="tab" id="tab-btn-stats">
+                <span class="tab-icon">📈</span>
+                <span>ផ្ទាំងទី៣៖ ស្ថិតិ (១ថ្ងៃ / ១អាទិត្យ / ១ខែ)</span>
+            </button>
+        </nav>
+
+        <!-- TAB 2: Daily Attendance Entry (Default Screen) -->
+        <section id="tab-daily" class="tab-panel active">
+            <div class="buddhist-card bodhi-card-bg">
+                <div class="card-title">
+                    <span>✍️ កត់ត្រាអវត្តមានប្រចាំថ្ងៃ</span>
+                    <button type="button" class="btn btn-secondary" id="btn-mark-all-present">✨ វត្តមានទាំងអស់</button>
+                </div>
+
+                <!-- Smart Time Detection Banner -->
+                <div class="smart-session-box">
+                    <div class="session-info">
+                        <span class="tab-icon">🤖</span>
+                        <span id="auto-session-text">កំពុងស្វែងរកម៉ោង...</span>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0; min-width: 150px;">
+                        <select id="session-toggle" class="form-control">
+                            <option value="morning">☀️ វេនព្រឹក</option>
+                            <option value="evening">🌙 វេនល្ងាច</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Controls: Date and Class Selection -->
+                <div class="controls-grid">
+                    <div class="form-group">
+                        <label for="attendance-date">📅 កាលបរិច្ឆេទស្រង់អវត្តមាន</label>
+                        <input type="date" id="attendance-date" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="daily-class-select">🏫 ជ្រើសរើសថ្នាក់ (១៥ ថ្នាក់)</label>
+                        <select id="daily-class-select" class="form-control">
+                            <!-- Populated dynamically (Classes 1 - 15) -->
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Monks / Students List (7 per class) -->
+                <div id="monk-list-container">
+                    <!-- Populated dynamically -->
+                </div>
+
+                <div style="margin-top: 20px; text-align: right;">
+                    <button type="button" id="btn-save-daily" class="btn btn-primary" style="padding: 14px 28px; font-size: 1.1rem;">
+                        💾 រក្សាទុកអវត្តមានថ្ងៃនេះ
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 1: Monthly Attendance Summary Table -->
+        <section id="tab-monthly" class="tab-panel">
+            <div class="buddhist-card bodhi-card-bg">
+                <div class="card-title">
+                    <span>📋 តារាងស្រង់អវត្តមានប្រចាំខែ (១ខែ)</span>
+                    <div style="display: flex; gap: 8px;">
+                        <button type="button" id="btn-export-excel" class="btn btn-secondary">📥 Export Excel</button>
+                        <button type="button" id="btn-print-report" class="btn btn-secondary">🖨️ បោះពុម្ព</button>
+                    </div>
+                </div>
+
+                <!-- Filters for Month, Year, and Class -->
+                <div class="controls-grid">
+                    <div class="form-group">
+                        <label for="monthly-class-select">🏫 ជ្រើសរើសថ្នាក់</label>
+                        <select id="monthly-class-select" class="form-control">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="monthly-month-select">🗓️ ជ្រើសរើសខែ</label>
+                        <select id="monthly-month-select" class="form-control">
+                            <option value="1">ខែមករា (Month 1)</option>
+                            <option value="2">ខែកុម្ភៈ (Month 2)</option>
+                            <option value="3">ខែមីនា (Month 3)</option>
+                            <option value="4">ខែមេសា (Month 4)</option>
+                            <option value="5">ខែឧសភា (Month 5)</option>
+                            <option value="6">ខែមិថុនា (Month 6)</option>
+                            <option value="7">ខែកក្កដា (Month 7)</option>
+                            <option value="8" selected>ខែសីហា (Month 8)</option>
+                            <option value="9">ខែកញ្ញា (Month 9)</option>
+                            <option value="10">ខែតុលា (Month 10)</option>
+                            <option value="11">ខែវិច្ឆិកា (Month 11)</option>
+                            <option value="12">ខែធ្នូ (Month 12)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="monthly-year-select">📆 ឆ្នាំ</label>
+                        <select id="monthly-year-select" class="form-control">
+                            <option value="2026" selected>២០២៦ (2026)</option>
+                            <option value="2025">២០២៥ (2025)</option>
+                            <option value="2027">២០២៧ (2027)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 15px; text-align: right;">
+                    <button type="button" id="btn-filter-monthly" class="btn btn-primary">🔍 មើលរបាយការណ៍</button>
+                </div>
+
+                <!-- Legend -->
+                <div style="display: flex; gap: 15px; margin-bottom: 15px; font-size: 0.88rem; flex-wrap: wrap;">
+                    <div><span class="cell-badge cell-p">វ</span> = វត្តមាន (Present)</div>
+                    <div><span class="cell-badge cell-l">ច</span> = ច្បាប់ (Permission)</div>
+                    <div><span class="cell-badge cell-a">អ</span> = អវត្តមាន (Absent)</div>
+                    <div><span class="cell-badge cell-t">យ</span> = យឺត (Late)</div>
+                </div>
+
+                <!-- Responsive Monthly Table -->
+                <div class="table-responsive">
+                    <table class="buddhist-table">
+                        <thead id="monthly-table-header">
+                            <!-- Dynamically generated -->
+                        </thead>
+                        <tbody id="monthly-table-body">
+                            <!-- Dynamically generated -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: Attendance Statistics Dashboard (1 Day, 1 Week, 1 Month) -->
+        <section id="tab-stats" class="tab-panel">
+            <div class="buddhist-card bodhi-card-bg">
+                <div class="card-title">
+                    <span>📈 ផ្ទាំងស្ថិតិអវត្តមាន (១ថ្ងៃ / ១អាទិត្យ / ១ខែ)</span>
+                    
+                    <!-- Timeframe Toggle Buttons -->
+                    <div class="timeframe-switch-group">
+                        <button type="button" class="timeframe-btn active" data-range="day">📅 ១ ថ្ងៃ (Day)</button>
+                        <button type="button" class="timeframe-btn" data-range="week">🗓️ ១ អាទិត្យ (Week)</button>
+                        <button type="button" class="timeframe-btn" data-range="month">📊 ១ ខែ (Month)</button>
+                    </div>
+                </div>
+
+                <!-- Controls: Target Class, Date & Search -->
+                <div class="controls-grid" style="margin-bottom: 20px;">
+                    <div class="form-group">
+                        <label for="stats-class-select">🏫 ជ្រើសរើសថ្នាក់</label>
+                        <select id="stats-class-select" class="form-control">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="stats-date-select">📆 កាលបរិច្ឆេទគិតស្ថិតិ</label>
+                        <input type="date" id="stats-date-select" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="stats-search-input">🔍 ស្វែងរកតាមឈ្មោះ</label>
+                        <input type="text" id="stats-search-input" class="form-control" placeholder="វាយឈ្មោះសមណសិស្ស...">
+                    </div>
+                </div>
+
+                <!-- KPI Summary Cards -->
+                <div class="kpi-grid">
+                    <div class="kpi-card kpi-present">
+                        <div class="kpi-icon">🟢</div>
+                        <div class="kpi-content">
+                            <div class="kpi-value" id="kpi-present-count">0 (0%)</div>
+                            <div class="kpi-label">វត្តមានសរុប (Present)</div>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card kpi-leave">
+                        <div class="kpi-icon">🟡</div>
+                        <div class="kpi-content">
+                            <div class="kpi-value" id="kpi-leave-count">0</div>
+                            <div class="kpi-label">ច្បាប់សរុប (Permission)</div>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card kpi-absent">
+                        <div class="kpi-icon">🔴</div>
+                        <div class="kpi-content">
+                            <div class="kpi-value" id="kpi-absent-count">0</div>
+                            <div class="kpi-label">អវត្តមានសរុប (Absent)</div>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card kpi-late">
+                        <div class="kpi-icon">🟠</div>
+                        <div class="kpi-content">
+                            <div class="kpi-value" id="kpi-late-count">0</div>
+                            <div class="kpi-label">យឺតសរុប (Late)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Student Attendance Breakdown (Per Monk / Student Stats) -->
+                <div style="margin-top: 25px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                        <h3 style="font-family: var(--font-title); color: var(--gold-bright); font-size: 1.15rem;">
+                            📜 ស្ថិតិអវត្តមានតាមសមណសិស្ស/សិស្សម្នាក់ៗ (<span id="stats-timeframe-label">១ ថ្ងៃ</span>)
+                        </h3>
+                    </div>
+
+                    <!-- Student Statistics Cards Container -->
+                    <div id="stats-student-breakdown" class="student-stats-grid">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer style="text-align: center; padding: 20px 0; font-size: 0.9rem; color: var(--text-muted); margin-top: auto;">
+            <p>☸️ វត្តខេមរវ័ន (បឹងស្នួល) • សង្កាត់បឹងកុកមាស ក្រុងកំពង់ចាម ខេត្តកំពង់ចាម ☸️</p>
+        </footer>
+
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/sampleData.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
