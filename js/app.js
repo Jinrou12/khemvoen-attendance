@@ -141,7 +141,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const bId = parseInt(b.getAttribute('data-class-id'));
                 if (bId === classId) {
                     b.classList.add('active');
-                    b.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                    // Scroll ONLY the horizontal container internally (NEVER scroll window vertically!)
+                    const scrollLeft = b.offsetLeft - (classPillsContainer.clientWidth / 2) + (b.clientWidth / 2);
+                    classPillsContainer.scrollTo({ left: scrollLeft, behavior: 'smooth' });
                 } else {
                     b.classList.remove('active');
                 }
