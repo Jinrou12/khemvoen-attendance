@@ -45,6 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentStatsRange = 'day'; // 'day', 'week', 'month'
 
+    // Status Cycle Sequence for 1 Single Box: Present (Empty/✓) -> Absent (A) -> Leave (P) -> Late (L) -> Present
+    const statusCycle = ['present', 'absent', 'leave', 'late'];
+
     // Set Default Dates to Today
     const todayStr = new Date().toISOString().split('T')[0];
     if (attendanceDateInput) attendanceDateInput.value = todayStr;
@@ -161,9 +164,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // -------------------------------------------------------------
-    // TAB 2: Daily Attendance Functionality with Tool 3 (A, P, L & Empty=Present)
+    // TAB 2: Daily Attendance Entry with 1 Single Status Box per Monk
+    // (Morning Session takes once, Evening Session takes once)
     // -------------------------------------------------------------
     let currentDailyState = {};
+
+    function renderSingleBoxContent(status) {
+        if (status === 'absent') return '<span class="box-badge text-a">A</span>';
+        if (status === 'leave') return '<span class="box-badge text-p">P</span>';
+        if (status === 'late') return '<span class="box-badge text-l">L</span>';
+        return '<span class="box-badge text-empty">✓</span>';
+    }
 
     function loadDailyAttendance() {
         const date = attendanceDateInput.value;
@@ -191,43 +202,31 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="monk-sub">${student.title} • ID: ${student.id}</div>
                     </div>
                 </div>
-                <div class="status-tool-group" data-student-id="${student.id}">
-                    <button type="button" class="status-box-btn ${status === 'present' ? 'active' : ''}" data-status="present" title="បានមក (Present)">
-                        ${status === 'present' ? '✓' : ''}
+                <div class="single-box-wrapper" data-student-id="${student.id}">
+                    <button type="button" class="single-box-btn status-${status}" data-status="${status}">
+                        ${renderSingleBoxContent(status)}
                     </button>
-                    <button type="button" class="status-tool-btn tool-a ${status === 'absent' ? 'active' : ''}" data-status="absent" title="A = អវត្តមាន (Absent)">A</button>
-                    <button type="button" class="status-tool-btn tool-p ${status === 'leave' ? 'active' : ''}" data-status="leave" title="P = ច្បាប់ (Permission)">P</button>
-                    <button type="button" class="status-tool-btn tool-l ${status === 'late' ? 'active' : ''}" data-status="late" title="L = យឺត (Late)">L</button>
                 </div>
             `;
             monkListContainer.appendChild(card);
         });
 
-        monkListContainer.querySelectorAll('.status-tool-group button').forEach(btn => {
+        monkListContainer.querySelectorAll('.single-box-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const group = e.target.closest('.status-tool-group');
-                const studentId = group.getAttribute('data-student-id');
-                const clickedStatus = e.target.getAttribute('data-status');
+                const boxBtn = e.currentTarget;
+                const wrapper = boxBtn.closest('.single-box-wrapper');
+                const studentId = wrapper.getAttribute('data-student-id');
+                const currentStatus = currentDailyState[studentId] || 'present';
 
-                let nextStatus = clickedStatus;
-                // If clicking an active A/P/L button again, toggle back to present (empty box)
-                if (currentDailyState[studentId] === clickedStatus && clickedStatus !== 'present') {
-                    nextStatus = 'present';
-                }
+                const currentIndex = statusCycle.indexOf(currentStatus);
+                const nextStatus = statusCycle[(currentIndex + 1) % statusCycle.length];
 
                 currentDailyState[studentId] = nextStatus;
 
-                // Update UI active state inside tool group
-                group.querySelectorAll('button').forEach(b => {
-                    const bStatus = b.getAttribute('data-status');
-                    if (bStatus === nextStatus) {
-                        b.classList.add('active');
-                        if (bStatus === 'present') b.textContent = '✓';
-                    } else {
-                        b.classList.remove('active');
-                        if (bStatus === 'present') b.textContent = '';
-                    }
-                });
+                // Update Box UI
+                boxBtn.className = `single-box-btn status-${nextStatus}`;
+                boxBtn.setAttribute('data-status', nextStatus);
+                boxBtn.innerHTML = renderSingleBoxContent(nextStatus);
             });
         });
     }
