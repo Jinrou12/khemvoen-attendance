@@ -280,7 +280,6 @@ document.addEventListener('DOMContentLoaded', () => {
             <tr>
                 <th style="width: 50px;">ល.រ</th>
                 <th style="min-width: 170px;" class="text-left">គោរមងេ-នាម</th>
-                <th style="min-width: 90px;">ថ្នាក់</th>
         `;
 
         for (let d = 1; d <= daysInMonth; d++) {
@@ -342,13 +341,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 rowDaysHTML += `<td>${dayBadge}</td>`;
             }
 
-            const classNameStr = `ថ្នាក់ទី ${toKhmerNum(student.classId)}`;
-
             bodyHTML += `
                 <tr>
                     <td>${toKhmerNum(idx + 1)}</td>
                     <td class="text-left"><strong>${student.name}</strong></td>
-                    <td>${classNameStr}</td>
                     ${rowDaysHTML}
                     <td style="color: var(--status-present); font-weight: bold;">${toKhmerNum(presentCount)}</td>
                     <td style="color: var(--status-leave); font-weight: bold;">${toKhmerNum(leaveCount)}</td>
