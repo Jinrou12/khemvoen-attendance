@@ -149,6 +149,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderMonthlyReport();
             } else if (targetTab === 'tab-stats') {
                 attendanceRecords = getStoredData('buddhist_attendance', {});
+                if (statsDateSelect && attendanceDateInput) {
+                    statsDateSelect.value = attendanceDateInput.value;
+                }
                 renderStatisticsDashboard();
             } else if (targetTab === 'tab-daily') {
                 loadDailyAttendance();
@@ -795,7 +798,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function getDateRangeList(refDateStr, rangeType) {
         const dateList = [];
-        const refDate = new Date(refDateStr);
+        if (!refDateStr) return dateList;
+        const [year, month, day] = refDateStr.split('-').map(Number);
+        const refDate = new Date(year, month - 1, day);
 
         if (rangeType === 'day') {
             dateList.push(refDateStr);
@@ -803,16 +808,16 @@ document.addEventListener('DOMContentLoaded', () => {
             for (let i = 0; i < 7; i++) {
                 const d = new Date(refDate);
                 d.setDate(refDate.getDate() - i);
-                dateList.push(d.toISOString().split('T')[0]);
+                const y = d.getFullYear();
+                const m = String(d.getMonth() + 1).padStart(2, '0');
+                const dt = String(d.getDate()).padStart(2, '0');
+                dateList.push(`${y}-${m}-${dt}`);
             }
         } else if (rangeType === 'month') {
-            const year = refDate.getFullYear();
-            const month = refDate.getMonth();
-            const totalDays = new Date(year, month + 1, 0).getDate();
-
-            for (let day = 1; day <= totalDays; day++) {
-                const dayStr = String(day).padStart(2, '0');
-                const monthStr = String(month + 1).padStart(2, '0');
+            const totalDays = new Date(year, month, 0).getDate();
+            for (let dayNum = 1; dayNum <= totalDays; dayNum++) {
+                const dayStr = String(dayNum).padStart(2, '0');
+                const monthStr = String(month).padStart(2, '0');
                 dateList.push(`${year}-${monthStr}-${dayStr}`);
             }
         }
@@ -820,9 +825,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderStatisticsDashboard() {
-        const refDateStr = statsDateSelect.value || todayStr;
+        // Ensure fresh records are read from localStorage
+        attendanceRecords = getStoredData('buddhist_attendance', {});
+
+        const refDateStr = (statsDateSelect && statsDateSelect.value) ? statsDateSelect.value : (attendanceDateInput ? attendanceDateInput.value : todayStr);
         const selectedClass = statsClassSelect ? statsClassSelect.value : 'all';
-        const searchQuery = (statsSearchInput.value || '').trim().toLowerCase();
+        const searchQuery = (statsSearchInput && statsSearchInput.value ? statsSearchInput.value : '').trim().toLowerCase();
         const dateList = getDateRangeList(refDateStr, currentStatsRange);
 
         if (statsTimeframeLabel) {
@@ -853,20 +861,23 @@ document.addEventListener('DOMContentLoaded', () => {
             dateList.forEach(dateKey => {
                 ['morning', 'evening'].forEach(session => {
                     const recordKey = `${dateKey}_${session}_class_${student.classId}`;
-                    const status = (attendanceRecords[recordKey] && attendanceRecords[recordKey][student.id]) || 'present';
+                    const sessionRecord = attendanceRecords[recordKey];
+                    if (sessionRecord) {
+                        const status = sessionRecord[student.id] || 'present';
 
-                    if (status === 'present') {
-                        sPresent++;
-                        presentTotal++;
-                    } else if (status === 'leave') {
-                        sLeave++;
-                        leaveTotal++;
-                    } else if (status === 'absent') {
-                        sAbsent++;
-                        absentTotal++;
-                    } else if (status === 'late') {
-                        sLate++;
-                        lateTotal++;
+                        if (status === 'present') {
+                            sPresent++;
+                            presentTotal++;
+                        } else if (status === 'leave') {
+                            sLeave++;
+                            leaveTotal++;
+                        } else if (status === 'absent') {
+                            sAbsent++;
+                            absentTotal++;
+                        } else if (status === 'late') {
+                            sLate++;
+                            lateTotal++;
+                        }
                     }
                 });
             });
@@ -885,21 +896,24 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         });
 
-        const grandTotalChecks = presentTotal + leaveTotal + absentTotal + lateTotal;
-        const presentPercentage = grandTotalChecks > 0 ? Math.round((presentTotal / grandTotalChecks) * 100) : 100;
-
         if (kpiPresent) kpiPresent.innerHTML = `${toKhmerNum(presentTotal)}`;
         if (kpiLeave) kpiLeave.innerHTML = `${toKhmerNum(leaveTotal)}`;
         if (kpiAbsent) kpiAbsent.innerHTML = `${toKhmerNum(absentTotal)}`;
         if (kpiLate) kpiLate.innerHTML = `${toKhmerNum(lateTotal)}`;
 
         if (statsStudentBreakdown) {
-            if (studentStats.length === 0) {
-                statsStudentBreakdown.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 30px;">មិនមានសមណសិស្សសមស្របតាមការស្វែងរកឡើយ</div>`;
+            // Show only students who have absent, leave, or late status
+            const absentStudents = studentStats.filter(st => (st.absent > 0 || st.leave > 0 || st.late > 0));
+
+            if (absentStudents.length === 0) {
+                statsStudentBreakdown.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--gold-bright); font-size: 1.02rem; padding: 25px; background: rgba(10,5,3,0.6); border-radius: 10px; border: 1px dashed var(--border-gold);">✨ មិនមានសមណសិស្សអវត្តមាន ច្បាប់ ឬយឺត ក្នុងកំឡុងពេលនេះឡើយ (វត្តមាន ១០០%)</div>`;
                 return;
             }
 
-            statsStudentBreakdown.innerHTML = studentStats.map(st => `
+            // Sort by highest absent count first
+            absentStudents.sort((a, b) => (b.absent * 100 + b.late * 10 + b.leave) - (a.absent * 100 + a.late * 10 + a.leave));
+
+            statsStudentBreakdown.innerHTML = absentStudents.map(st => `
                 <div class="student-stat-card">
                     <div class="student-stat-header">
                         <div class="student-stat-avatar">${st.student.number}</div>
