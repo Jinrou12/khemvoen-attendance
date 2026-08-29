@@ -835,57 +835,60 @@ body {
 /* Mobile & Smart Phone Responsive Optimizations (< 768px) */
 @media (max-width: 768px) {
     .app-container {
-        padding: 6px;
+        padding: 5px;
     }
 
     .buddhist-header {
-        padding: 16px 10px 12px;
-        margin-bottom: 12px;
+        padding: 12px 8px 10px;
+        margin-bottom: 10px;
+        border-radius: 12px;
     }
 
     .header-logo-art {
-        width: 72px;
-        height: 72px;
-        margin-bottom: 6px;
+        width: 54px;
+        height: 54px;
+        margin-bottom: 4px;
     }
 
     .buddhist-title {
-        font-size: 1.2rem;
+        font-size: 1.02rem;
+        margin-bottom: 3px;
     }
     
     .buddhist-subtitle {
-        font-size: 0.8rem;
+        font-size: 0.74rem;
+        line-height: 1.35;
     }
 
     .tabs-navigation {
         flex-direction: row;
         gap: 3px;
         padding: 4px;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
     }
 
     .tab-btn {
         padding: 8px 2px;
-        font-size: 0.75rem;
+        font-size: 0.74rem;
         flex-direction: column;
         gap: 2px;
         text-align: center;
     }
 
     .tab-btn .tab-icon {
-        font-size: 1rem;
+        font-size: 0.98rem;
     }
 
     .buddhist-card {
-        padding: 12px;
+        padding: 10px;
         border-radius: 10px;
     }
 
     .card-title {
         flex-direction: column;
         align-items: flex-start;
-        gap: 10px;
-        font-size: 1.05rem;
+        gap: 8px;
+        font-size: 1rem;
     }
 
     .card-title-controls {
@@ -908,8 +911,8 @@ body {
     #btn-session-switch {
         flex: 1;
         width: auto;
-        padding: 8px 10px;
-        font-size: 0.85rem;
+        padding: 8px 8px;
+        font-size: 0.82rem;
     }
 
     .class-switcher-box {
@@ -985,11 +988,24 @@ body {
 }
 
 @media (max-width: 480px) {
+    .buddhist-header {
+        padding: 10px 6px 8px;
+    }
+
+    .header-logo-art {
+        width: 48px;
+        height: 48px;
+    }
+
     .buddhist-title {
-        font-size: 1.05rem;
+        font-size: 0.96rem;
+    }
+
+    .buddhist-subtitle {
+        font-size: 0.7rem;
     }
 
     .tab-btn {
-        font-size: 0.7rem;
+        font-size: 0.68rem;
     }
 }
