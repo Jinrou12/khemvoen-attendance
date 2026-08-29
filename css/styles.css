@@ -322,7 +322,7 @@ body {
 
 /* Class Switcher Box (15 Classes Pill Switcher Bar) */
 .class-switcher-box {
-    margin-bottom: 18px;
+    margin-bottom: 14px;
     background: rgba(15, 8, 5, 0.7);
     border: 1px solid var(--border-gold);
     border-radius: 12px;
@@ -393,6 +393,68 @@ body {
     border-color: var(--gold-bright);
     box-shadow: 0 0 12px rgba(255, 215, 0, 0.45);
     transform: translateY(-1px);
+}
+
+/* Attendance Tool Legend (Empty = បានមក, A = អវត្តមាន, P = ច្បាប់, L = យឺត) */
+.attendance-tool-legend {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    font-size: 0.88rem;
+    color: var(--text-gold);
+    flex-wrap: wrap;
+    background: rgba(10, 5, 3, 0.6);
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(212, 175, 55, 0.25);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.badge-empty-legend {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border: 1px solid var(--border-gold);
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.5);
+    font-size: 0.75rem;
+}
+
+.badge-tool {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+.badge-tool.tool-a {
+    background: var(--status-absent-bg);
+    border: 1px solid var(--status-absent);
+    color: var(--status-absent);
+}
+
+.badge-tool.tool-p {
+    background: var(--status-leave-bg);
+    border: 1px solid var(--status-leave);
+    color: var(--status-leave);
+}
+
+.badge-tool.tool-l {
+    background: var(--status-late-bg);
+    border: 1px solid var(--status-late);
+    color: var(--status-late);
 }
 
 /* Control Row & Filters */
@@ -658,55 +720,90 @@ body {
     color: var(--text-muted);
 }
 
-/* Status Radio/Toggle Group */
-.status-btn-group {
+/* Tool Group in Monk Card (Empty Box + A, P, L Buttons) */
+.status-tool-group {
     display: flex;
+    align-items: center;
     gap: 6px;
 }
 
-.status-opt-btn {
-    padding: 8px 12px;
+.status-box-btn {
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--border-gold);
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.45);
-    color: var(--text-muted);
-    font-family: var(--font-body);
-    font-size: 0.88rem;
-    font-weight: 600;
+    background: rgba(0, 0, 0, 0.5);
+    color: var(--status-present);
+    font-size: 1.1rem;
+    font-weight: bold;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: all 0.2s ease;
 }
 
-.status-opt-btn:hover {
-    border-color: var(--gold-primary);
-}
-
-.status-opt-btn.active[data-status="present"] {
-    background: var(--status-present);
-    color: #fff;
+.status-box-btn:hover {
     border-color: var(--status-present);
-    box-shadow: 0 0 8px rgba(46, 204, 113, 0.4);
 }
 
-.status-opt-btn.active[data-status="leave"] {
-    background: var(--status-leave);
-    color: #fff;
-    border-color: var(--status-leave);
-    box-shadow: 0 0 8px rgba(243, 156, 18, 0.4);
+.status-box-btn.active {
+    background: var(--status-present-bg);
+    border-color: var(--status-present);
+    box-shadow: 0 0 10px rgba(46, 204, 113, 0.35);
 }
 
-.status-opt-btn.active[data-status="absent"] {
+.status-tool-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.status-tool-btn.tool-a {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(231, 76, 60, 0.4);
+    color: var(--status-absent);
+}
+.status-tool-btn.tool-a:hover { border-color: var(--status-absent); }
+.status-tool-btn.tool-a.active {
     background: var(--status-absent);
     color: #fff;
     border-color: var(--status-absent);
-    box-shadow: 0 0 8px rgba(231, 76, 60, 0.4);
+    box-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
 }
 
-.status-opt-btn.active[data-status="late"] {
+.status-tool-btn.tool-p {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(243, 156, 18, 0.4);
+    color: var(--status-leave);
+}
+.status-tool-btn.tool-p:hover { border-color: var(--status-leave); }
+.status-tool-btn.tool-p.active {
+    background: var(--status-leave);
+    color: #120a07;
+    border-color: var(--status-leave);
+    box-shadow: 0 0 10px rgba(243, 156, 18, 0.5);
+}
+
+.status-tool-btn.tool-l {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(230, 126, 34, 0.4);
+    color: var(--status-late);
+}
+.status-tool-btn.tool-l:hover { border-color: var(--status-late); }
+.status-tool-btn.tool-l.active {
     background: var(--status-late);
     color: #fff;
     border-color: var(--status-late);
-    box-shadow: 0 0 8px rgba(230, 126, 34, 0.4);
+    box-shadow: 0 0 10px rgba(230, 126, 34, 0.5);
 }
 
 /* Action Buttons */
@@ -924,11 +1021,19 @@ body {
         font-size: 0.82rem;
     }
 
-    .monk-attendance-card {
-        flex-direction: column;
-        align-items: stretch;
+    .attendance-tool-legend {
         gap: 8px;
-        padding: 10px;
+        font-size: 0.78rem;
+        padding: 6px 10px;
+        justify-content: space-between;
+    }
+
+    .monk-attendance-card {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+        padding: 10px 8px;
     }
 
     .monk-info {
@@ -936,32 +1041,27 @@ body {
     }
 
     .monk-avatar {
-        width: 36px;
-        height: 36px;
-        font-size: 0.95rem;
+        width: 34px;
+        height: 34px;
+        font-size: 0.9rem;
     }
 
     .monk-details .monk-name {
-        font-size: 0.95rem;
+        font-size: 0.92rem;
     }
 
     .monk-details .monk-sub {
-        font-size: 0.78rem;
-    }
-
-    .status-btn-group {
-        width: 100%;
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 3px;
-    }
-
-    .status-opt-btn {
-        width: 100%;
-        text-align: center;
-        padding: 6px 1px;
         font-size: 0.75rem;
-        white-space: nowrap;
+    }
+
+    .status-tool-group {
+        gap: 4px;
+    }
+
+    .status-box-btn, .status-tool-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 0.88rem;
     }
 
     .student-stats-grid {
@@ -1007,5 +1107,11 @@ body {
 
     .tab-btn {
         font-size: 0.68rem;
+    }
+
+    .status-box-btn, .status-tool-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 0.82rem;
     }
 }

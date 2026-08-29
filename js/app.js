@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // -------------------------------------------------------------
-    // TAB 2: Daily Attendance Functionality
+    // TAB 2: Daily Attendance Functionality with Tool 3 (A, P, L & Empty=Present)
     // -------------------------------------------------------------
     let currentDailyState = {};
 
@@ -191,26 +191,43 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="monk-sub">${student.title} • ID: ${student.id}</div>
                     </div>
                 </div>
-                <div class="status-btn-group" data-student-id="${student.id}">
-                    <button type="button" class="status-opt-btn ${status === 'present' ? 'active' : ''}" data-status="present">វត្តមាន</button>
-                    <button type="button" class="status-opt-btn ${status === 'leave' ? 'active' : ''}" data-status="leave">ច្បាប់</button>
-                    <button type="button" class="status-opt-btn ${status === 'absent' ? 'active' : ''}" data-status="absent">អវត្តមាន</button>
-                    <button type="button" class="status-opt-btn ${status === 'late' ? 'active' : ''}" data-status="late">យឺត</button>
+                <div class="status-tool-group" data-student-id="${student.id}">
+                    <button type="button" class="status-box-btn ${status === 'present' ? 'active' : ''}" data-status="present" title="បានមក (Present)">
+                        ${status === 'present' ? '✓' : ''}
+                    </button>
+                    <button type="button" class="status-tool-btn tool-a ${status === 'absent' ? 'active' : ''}" data-status="absent" title="A = អវត្តមាន (Absent)">A</button>
+                    <button type="button" class="status-tool-btn tool-p ${status === 'leave' ? 'active' : ''}" data-status="leave" title="P = ច្បាប់ (Permission)">P</button>
+                    <button type="button" class="status-tool-btn tool-l ${status === 'late' ? 'active' : ''}" data-status="late" title="L = យឺត (Late)">L</button>
                 </div>
             `;
             monkListContainer.appendChild(card);
         });
 
-        monkListContainer.querySelectorAll('.status-opt-btn').forEach(btn => {
+        monkListContainer.querySelectorAll('.status-tool-group button').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const group = e.target.closest('.status-btn-group');
+                const group = e.target.closest('.status-tool-group');
                 const studentId = group.getAttribute('data-student-id');
-                const newStatus = e.target.getAttribute('data-status');
+                const clickedStatus = e.target.getAttribute('data-status');
 
-                group.querySelectorAll('.status-opt-btn').forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
+                let nextStatus = clickedStatus;
+                // If clicking an active A/P/L button again, toggle back to present (empty box)
+                if (currentDailyState[studentId] === clickedStatus && clickedStatus !== 'present') {
+                    nextStatus = 'present';
+                }
 
-                currentDailyState[studentId] = newStatus;
+                currentDailyState[studentId] = nextStatus;
+
+                // Update UI active state inside tool group
+                group.querySelectorAll('button').forEach(b => {
+                    const bStatus = b.getAttribute('data-status');
+                    if (bStatus === nextStatus) {
+                        b.classList.add('active');
+                        if (bStatus === 'present') b.textContent = '✓';
+                    } else {
+                        b.classList.remove('active');
+                        if (bStatus === 'present') b.textContent = '';
+                    }
+                });
             });
         });
     }
