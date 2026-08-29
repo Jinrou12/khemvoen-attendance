@@ -270,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderMonthlyReport() {
         const year = parseInt(monthlyYearSelect.value);
         const month = parseInt(monthlyMonthSelect.value);
-        const selectedClass = monthlyClassSelect.value;
+        const selectedClass = monthlyClassSelect ? monthlyClassSelect.value : 'all';
 
         const daysInMonth = new Date(year, month, 0).getDate();
 
@@ -411,7 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderStatisticsDashboard() {
         const refDateStr = statsDateSelect.value || todayStr;
-        const selectedClass = statsClassSelect.value;
+        const selectedClass = statsClassSelect ? statsClassSelect.value : 'all';
         const searchQuery = (statsSearchInput.value || '').trim().toLowerCase();
         const dateList = getDateRangeList(refDateStr, currentStatsRange);
 
