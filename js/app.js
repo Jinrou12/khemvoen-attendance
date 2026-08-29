@@ -15,8 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Tab 2 Elements (Daily Attendance)
     const attendanceDateInput = document.getElementById('attendance-date');
-    const sessionToggle = document.getElementById('session-toggle');
-    const autoSessionText = document.getElementById('auto-session-text');
     const dailyClassSelect = document.getElementById('daily-class-select');
     const monkListContainer = document.getElementById('monk-list-container');
     const btnSessionSwitch = document.getElementById('btn-session-switch');
@@ -65,30 +63,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateSessionUI(session, isAuto = false) {
         currentSession = session;
-        if (sessionToggle) sessionToggle.value = session;
-        if (autoSessionText) {
-            const timeLabel = session === 'morning' ? '☀️ វេនព្រឹក (០៧:០០ - ០៩:០០)' : '🌙 វេនល្ងាច (១៧:០០ - ១៩:០០)';
-            autoSessionText.innerHTML = isAuto ? `ស្វ័យប្រវត្តិ៖ <strong>${timeLabel}</strong>` : `ជ្រើសរើស៖ <strong>${timeLabel}</strong>`;
-        }
         if (btnSessionSwitch) {
             btnSessionSwitch.innerHTML = session === 'morning' ? '☀️ វេនព្រឹក (០៧:០០ - ០៩:០០)' : '🌙 វេនល្ងាច (១៧:០០ - ១៩:០០)';
         }
     }
 
-    if (sessionToggle) {
-        sessionToggle.addEventListener('change', (e) => {
-            updateSessionUI(e.target.value, false);
-            loadDailyAttendance();
-        });
-    }
-
     // Toggle Session via Switch Button (☀️ វេនព្រឹក <-> 🌙 វេនល្ងាច)
     if (btnSessionSwitch) {
         btnSessionSwitch.addEventListener('click', () => {
-            const newSession = currentSession === 'morning' ? 'evening' : 'morning';
-            updateSessionUI(newSession, false);
+            currentSession = currentSession === 'morning' ? 'evening' : 'morning';
+            updateSessionUI(currentSession, false);
             loadDailyAttendance();
-            const sessionLabel = newSession === 'morning' ? 'ព្រឹក' : 'ល្ងាច';
+            const sessionLabel = currentSession === 'morning' ? 'ព្រឹក' : 'ល្ងាច';
             showToast(`បានផ្លាស់ប្តូរទៅ វេន${sessionLabel}!`);
         });
     }
@@ -139,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function loadDailyAttendance() {
         const date = attendanceDateInput.value;
         const classId = parseInt(dailyClassSelect.value);
-        const session = sessionToggle.value;
+        const session = currentSession;
 
         const recordKey = `${date}_${session}_class_${classId}`;
         const savedRecords = attendanceRecords[recordKey] || {};
@@ -194,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnSaveDaily.addEventListener('click', () => {
             const date = attendanceDateInput.value;
             const classId = parseInt(dailyClassSelect.value);
-            const session = sessionToggle.value;
+            const session = currentSession;
 
             const recordKey = `${date}_${session}_class_${classId}`;
             attendanceRecords[recordKey] = { ...currentDailyState };
