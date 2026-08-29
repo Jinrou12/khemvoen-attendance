@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentStatsRange = 'day'; // 'day', 'week', 'month'
 
-    // Status Cycle Sequence for 1 Single Box: Present (Empty/✓) -> Absent (A) -> Leave (P) -> Late (L) -> Present
+    // Status Cycle Sequence for 1 Single Box: Present (Completely Empty Box) -> Absent (A) -> Leave (P) -> Late (L) -> Present
     const statusCycle = ['present', 'absent', 'leave', 'late'];
 
     // Set Default Dates to Today
@@ -164,8 +164,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // -------------------------------------------------------------
-    // TAB 2: Daily Attendance Entry with 1 Single Status Box per Monk
-    // (Morning Session takes once, Evening Session takes once)
+    // TAB 2: Daily Attendance Entry with Completely Empty Box (Default = បានមក)
+    // Click box cycles: Empty Box -> A (អវត្តមាន) -> P (ច្បាប់) -> L (យឺត) -> Empty Box
     // -------------------------------------------------------------
     let currentDailyState = {};
 
@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (status === 'absent') return '<span class="box-badge text-a">A</span>';
         if (status === 'leave') return '<span class="box-badge text-p">P</span>';
         if (status === 'late') return '<span class="box-badge text-l">L</span>';
-        return '<span class="box-badge text-empty">✓</span>';
+        return ''; // Completely Empty Box for Present / ได้មក
     }
 
     function loadDailyAttendance() {
