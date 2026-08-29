@@ -310,7 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------------------------------------------------
     // TAB 1: Monthly Attendance Summary Report
     // -------------------------------------------------------------
-    let monthlyReportViewMode = 'single'; // 'single' or 'full'
+    let monthlyReportViewMode = 'full'; // 'single' or 'full' — default: show full month
     let monthlySortFilter = 'all'; // 'all', 'absent', 'leave', 'late'
 
     // Populate day selector options based on selected month/year
