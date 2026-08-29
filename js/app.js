@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const statsDateSelect = document.getElementById('stats-date-select');
     const statsSearchInput = document.getElementById('stats-search-input');
     const timeframeBtns = document.querySelectorAll('.timeframe-btn');
+    const btnDownloadStatsJpeg = document.getElementById('btn-download-stats-jpeg');
     const kpiPresent = document.getElementById('kpi-present-count');
     const kpiLeave = document.getElementById('kpi-leave-count');
     const kpiAbsent = document.getElementById('kpi-absent-count');
@@ -744,6 +745,53 @@ document.addEventListener('DOMContentLoaded', () => {
     if (statsClassSelect) statsClassSelect.addEventListener('change', renderStatisticsDashboard);
     if (statsDateSelect) statsDateSelect.addEventListener('change', renderStatisticsDashboard);
     if (statsSearchInput) statsSearchInput.addEventListener('input', renderStatisticsDashboard);
+    if (btnDownloadStatsJpeg) btnDownloadStatsJpeg.addEventListener('click', exportStatsToJPEG);
+
+    function exportStatsToJPEG() {
+        const statsCard = document.querySelector('#tab-stats .buddhist-card');
+        if (!statsCard) {
+            showToast('មិនអាចរកឃើញផ្ទាំងស្ថិតិឡើយ!');
+            return;
+        }
+
+        if (typeof html2canvas === 'undefined') {
+            showToast('មិនទាន់មានបណ្ណាល័យ html2canvas ឡើយ!');
+            return;
+        }
+
+        showToast('⌛ កំពុងរៀបចំទាញយករូបភាព JPEG...');
+
+        const jpegBtn = document.getElementById('btn-download-stats-jpeg');
+        if (jpegBtn) jpegBtn.style.visibility = 'hidden';
+
+        html2canvas(statsCard, {
+            scale: 2,
+            useCORS: true,
+            backgroundColor: '#120a07',
+            logging: false
+        }).then(canvas => {
+            if (jpegBtn) jpegBtn.style.visibility = 'visible';
+
+            const image = canvas.toDataURL('image/jpeg', 0.95);
+            const refDateStr = (statsDateSelect && statsDateSelect.value) ? statsDateSelect.value : todayStr;
+            const selectedClass = (statsClassSelect && statsClassSelect.value !== 'all') ? `ថ្នាក់ទី${toKhmerNum(statsClassSelect.value)}` : 'គ្រប់ថ្នាក់';
+            const rangeText = currentStatsRange === 'day' ? '១ថ្ងៃ' : (currentStatsRange === 'week' ? '១អាទិត្យ' : '១ខែ');
+            const fileName = `ស្ថិតិអវត្តមាន_${selectedClass}_${rangeText}_${refDateStr}.jpg`;
+
+            const link = document.createElement('a');
+            link.href = image;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showToast('✅ បានទាញយករូបភាព JPEG ដោយជោគជ័យ!');
+        }).catch(err => {
+            if (jpegBtn) jpegBtn.style.visibility = 'visible';
+            console.error('JPEG Export Error:', err);
+            showToast('❌ មានបញ្ហាក្នុងការទាញយករូបភាព JPEG!');
+        });
+    }
 
     function getDateRangeList(refDateStr, rangeType) {
         const dateList = [];

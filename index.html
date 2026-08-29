@@ -184,20 +184,31 @@
         <!-- TAB 3: Attendance Statistics Dashboard (1 Day, 1 Week, 1 Month) -->
         <section id="tab-stats" class="tab-panel">
             <div class="buddhist-card bodhi-card-bg">
-                <div class="card-title">
+                <div class="card-title" style="flex-wrap: wrap; gap: 10px;">
                     <span>📈 ផ្ទាំងស្ថិតិអវត្តមាន (១ថ្ងៃ / ១អាទិត្យ / ១ខែ)</span>
                     
-                    <!-- Timeframe Toggle Buttons -->
-                    <div class="timeframe-switch-group">
-                        <button type="button" class="timeframe-btn active" data-range="day">📅 ១ ថ្ងៃ (Day)</button>
-                        <button type="button" class="timeframe-btn" data-range="week">🗓️ ១ អាទិត្យ (Week)</button>
-                        <button type="button" class="timeframe-btn" data-range="month">📊 ១ ខែ (Month)</button>
+                    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                        <!-- Timeframe Toggle Buttons -->
+                        <div class="timeframe-switch-group">
+                            <button type="button" class="timeframe-btn active" data-range="day">📅 ១ ថ្ងៃ (Day)</button>
+                            <button type="button" class="timeframe-btn" data-range="week">🗓️ ១ អាទិត្យ (Week)</button>
+                            <button type="button" class="timeframe-btn" data-range="month">📊 ១ ខែ (Month)</button>
+                        </div>
+                        <!-- Download JPEG Button -->
+                        <button type="button" id="btn-download-stats-jpeg" class="btn btn-export-jpeg" title="ទាញយកស្ថិតិជារូបភាព JPEG">
+                            🖼️ ទាញយក JPEG
+                        </button>
                     </div>
                 </div>
 
                 <!-- Controls: Target Class, Date & Search -->
                 <div class="controls-grid" style="margin-bottom: 20px;">
-
+                    <div class="form-group">
+                        <label for="stats-class-select">🏫 ជ្រើសរើសថ្នាក់</label>
+                        <select id="stats-class-select" class="form-control">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
                     <div class="form-group">
                         <label for="stats-date-select">📆 កាលបរិច្ឆេទគិតស្ថិតិ</label>
                         <input type="date" id="stats-date-select" class="form-control">
@@ -271,6 +282,7 @@
     <div id="toast-container" class="toast-container"></div>
 
     <!-- Scripts -->
+    <script src="js/html2canvas.min.js"></script>
     <script src="js/sampleData.js"></script>
     <script src="js/app.js"></script>
 </body>

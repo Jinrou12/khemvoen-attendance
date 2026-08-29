@@ -1022,6 +1022,33 @@ body {
     color: var(--gold-bright);
 }
 
+.btn-export-jpeg {
+    background: linear-gradient(135deg, #d4af37, #b8860b);
+    color: #120a07;
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    font-weight: bold;
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border-gold);
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.35);
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-export-jpeg:hover {
+    background: linear-gradient(135deg, var(--gold-bright), #d4af37);
+    box-shadow: 0 6px 18px rgba(255, 215, 0, 0.55);
+    transform: translateY(-1px);
+}
+
+.btn-export-jpeg:active {
+    transform: translateY(0);
+}
+
 /* Fullscreen Mode Styling */
 :fullscreen, :-webkit-full-screen, :-moz-full-screen, :-ms-fullscreen, .is-fullscreen-card {
     width: 100vw !important;
@@ -1315,6 +1342,13 @@ body {
         align-items: flex-start;
         gap: 8px;
         font-size: 1rem;
+    }
+
+    .btn-export-jpeg {
+        width: 100%;
+        justify-content: center;
+        padding: 8px 12px;
+        font-size: 0.85rem;
     }
 
     .card-title-controls {
