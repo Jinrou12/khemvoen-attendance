@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Tab 2 Elements (Daily Attendance)
     const attendanceDateInput = document.getElementById('attendance-date');
     const dailyClassSelect = document.getElementById('daily-class-select');
+    const classPillsContainer = document.getElementById('class-pills-container');
     const monkListContainer = document.getElementById('monk-list-container');
     const btnSessionSwitch = document.getElementById('btn-session-switch');
     const btnSaveDaily = document.getElementById('btn-save-daily');
@@ -103,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // -------------------------------------------------------------
-    // Populate Select Options (15 Classes)
+    // Populate Select Options & 15 Class Pill Buttons
     // -------------------------------------------------------------
     function populateClassSelects() {
         const options = classes.map(c => `<option value="${c.id}">${c.name} (${c.room})</option>`).join('');
@@ -114,8 +115,48 @@ document.addEventListener('DOMContentLoaded', () => {
         if (statsClassSelect) {
             statsClassSelect.innerHTML = `<option value="all">--- គ្រប់ថ្នាក់ទាំង ១៥ ---</option>` + options;
         }
+
+        // Render 15 Class Pill Switcher Buttons (ថ្នាក់ទី១, ថ្នាក់ទី២ ... ថ្នាក់ទី១៥)
+        if (classPillsContainer) {
+            classPillsContainer.innerHTML = classes.map((c, i) => `
+                <button type="button" class="class-pill-btn ${i === 0 ? 'active' : ''}" data-class-id="${c.id}">
+                    ${c.name}
+                </button>
+            `).join('');
+
+            classPillsContainer.querySelectorAll('.class-pill-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const classId = parseInt(e.target.getAttribute('data-class-id'));
+                    selectClass(classId);
+                });
+            });
+        }
     }
+
+    function selectClass(classId) {
+        if (dailyClassSelect) dailyClassSelect.value = classId;
+
+        if (classPillsContainer) {
+            classPillsContainer.querySelectorAll('.class-pill-btn').forEach(b => {
+                const bId = parseInt(b.getAttribute('data-class-id'));
+                if (bId === classId) {
+                    b.classList.add('active');
+                    b.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                } else {
+                    b.classList.remove('active');
+                }
+            });
+        }
+        loadDailyAttendance();
+    }
+
     populateClassSelects();
+
+    if (dailyClassSelect) {
+        dailyClassSelect.addEventListener('change', (e) => {
+            selectClass(parseInt(e.target.value));
+        });
+    }
 
     // -------------------------------------------------------------
     // TAB 2: Daily Attendance Functionality
@@ -124,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function loadDailyAttendance() {
         const date = attendanceDateInput.value;
-        const classId = parseInt(dailyClassSelect.value);
+        const classId = parseInt(dailyClassSelect ? dailyClassSelect.value : 1);
         const session = currentSession;
 
         const recordKey = `${date}_${session}_class_${classId}`;
@@ -172,14 +213,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (dailyClassSelect) dailyClassSelect.addEventListener('change', loadDailyAttendance);
     if (attendanceDateInput) attendanceDateInput.addEventListener('change', loadDailyAttendance);
 
     // Save Daily Attendance
     if (btnSaveDaily) {
         btnSaveDaily.addEventListener('click', () => {
             const date = attendanceDateInput.value;
-            const classId = parseInt(dailyClassSelect.value);
+            const classId = parseInt(dailyClassSelect ? dailyClassSelect.value : 1);
             const session = currentSession;
 
             const recordKey = `${date}_${session}_class_${classId}`;

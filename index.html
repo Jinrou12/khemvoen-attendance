@@ -55,13 +55,17 @@
                     <button type="button" class="btn btn-primary" id="btn-session-switch">☀️ វេនព្រឹក (០៧:០០ - ០៩:០០)</button>
                 </div>
 
-                <!-- Controls: Class Selection -->
-                <div class="controls-grid" style="grid-template-columns: 1fr; margin-bottom: 20px;">
-                    <div class="form-group">
-                        <label for="daily-class-select">🏫 ជ្រើសរើសថ្នាក់ (១៥ ថ្នាក់)</label>
-                        <select id="daily-class-select" class="form-control">
-                            <!-- Populated dynamically (Classes 1 - 15) -->
+                <!-- Class Switcher Bar (15 Classes Pill Switcher) -->
+                <div class="class-switcher-box">
+                    <div class="class-switcher-header">
+                        <span>🏫 ជ្រើសរើសថ្នាក់ (១៥ ថ្នាក់)៖</span>
+                        <select id="daily-class-select" class="form-control class-select-dropdown">
+                            <!-- Populated dynamically -->
                         </select>
+                    </div>
+                    <!-- Horizontal Scrollable Class Pills (ថ្នាក់ទី១ ... ថ្នាក់ទី១៥) -->
+                    <div id="class-pills-container" class="class-pills-scroll">
+                        <!-- Populated dynamically by JS -->
                     </div>
                 </div>
 
