@@ -44,15 +44,16 @@
         <section id="tab-daily" class="tab-panel active">
             <div class="buddhist-card bodhi-card-bg">
                 <div class="card-title">
-                    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-                        <span>✍️ កត់ត្រាអវត្តមានប្រចាំថ្ងៃ</span>
-                        <div style="display: flex; align-items: center; gap: 6px;">
-                            <label for="attendance-date" style="font-size: 0.92rem; color: var(--text-gold); margin-bottom: 0;">📅</label>
-                            <input type="date" id="attendance-date" class="form-control" style="padding: 8px 12px; font-size: 0.95rem; width: auto; background: rgba(0,0,0,0.5);">
+                    <span>✍️ កត់ត្រាអវត្តមានប្រចាំថ្ងៃ</span>
+                    <div class="card-title-controls">
+                        <!-- Date Picker Field -->
+                        <div class="date-input-wrapper">
+                            <span class="date-icon">📅</span>
+                            <input type="date" id="attendance-date" class="form-control date-picker-input">
                         </div>
+                        <!-- Session Switcher Button (☀️ វេនព្រឹក / 🌙 វេនល្ងាច) -->
+                        <button type="button" class="btn btn-primary" id="btn-session-switch">☀️ វេនព្រឹក</button>
                     </div>
-                    <!-- Session Switcher Button (☀️ វេនព្រឹក / 🌙 វេនល្ងាច) -->
-                    <button type="button" class="btn btn-primary" id="btn-session-switch">☀️ វេនព្រឹក (០៧:០០ - ០៩:០០)</button>
                 </div>
 
                 <!-- Class Switcher Bar (15 Classes Pill Switcher) -->

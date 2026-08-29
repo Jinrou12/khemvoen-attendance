@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateSessionUI(session, isAuto = false) {
         currentSession = session;
         if (btnSessionSwitch) {
-            btnSessionSwitch.innerHTML = session === 'morning' ? '☀️ វេនព្រឹក (០៧:០០ - ០៩:០០)' : '🌙 វេនល្ងាច (១៧:០០ - ១៩:០០)';
+            btnSessionSwitch.innerHTML = session === 'morning' ? '☀️ វេនព្រឹក' : '🌙 វេនល្ងាច';
         }
     }
 
