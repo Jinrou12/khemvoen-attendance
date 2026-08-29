@@ -1246,34 +1246,35 @@ body {
     background: rgba(38, 19, 12, 0.99);
 }
 
-/* Mobile Responsive Optimization (< 600px): Auto-fit all 31 days (១ ដល់ ៣១) on screen */
+/* Mobile Responsive Optimization (< 600px): Full Name Display + Smooth Days Scroll */
 @media (max-width: 600px) {
     .table-responsive {
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .buddhist-table {
-        min-width: 100% !important;
-        width: 100% !important;
-        table-layout: fixed !important;
+        min-width: 840px !important;
+        width: max-content !important;
+        table-layout: auto !important;
     }
 
     .buddhist-table .col-no {
-        width: 22px !important;
-        min-width: 22px !important;
-        max-width: 22px !important;
-        font-size: 0.68rem !important;
-        padding: 3px 0 !important;
+        width: 26px !important;
+        min-width: 26px !important;
+        max-width: 26px !important;
+        font-size: 0.75rem !important;
+        padding: 4px 2px !important;
     }
 
     .buddhist-table .col-name {
-        min-width: 76px !important;
-        max-width: 84px !important;
-        padding: 3px 2px !important;
-        font-size: 0.72rem !important;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        min-width: 150px !important;
+        max-width: none !important;
+        padding: 5px 8px !important;
+        font-size: 0.82rem !important;
+        white-space: nowrap !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
     }
 
     .buddhist-table th:nth-child(1),
@@ -1283,23 +1284,25 @@ body {
 
     .buddhist-table th:nth-child(2),
     .buddhist-table td:nth-child(2) {
-        left: 22px !important;
+        left: 26px !important;
+        box-shadow: 4px 0 10px rgba(0, 0, 0, 0.7) !important;
     }
 
     .buddhist-table .col-day {
-        width: auto !important;
-        min-width: 0 !important;
-        padding: 3px 0 !important;
-        font-size: 0.62rem !important;
+        width: 22px !important;
+        min-width: 22px !important;
+        max-width: 22px !important;
+        padding: 4px 1px !important;
+        font-size: 0.72rem !important;
         font-weight: 600;
     }
 
     .buddhist-table .cell-badge {
-        width: 13px !important;
-        height: 13px !important;
-        font-size: 0.55rem !important;
+        width: 15px !important;
+        height: 15px !important;
+        font-size: 0.62rem !important;
         border-radius: 3px !important;
-        line-height: 13px !important;
+        line-height: 15px !important;
     }
 }
 
