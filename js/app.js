@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const autoSessionText = document.getElementById('auto-session-text');
     const dailyClassSelect = document.getElementById('daily-class-select');
     const monkListContainer = document.getElementById('monk-list-container');
-    const btnMarkAllPresent = document.getElementById('btn-mark-all-present');
+    const btnSessionSwitch = document.getElementById('btn-session-switch');
     const btnSaveDaily = document.getElementById('btn-save-daily');
 
     // Tab 1 Elements (Monthly Report)
@@ -70,12 +70,26 @@ document.addEventListener('DOMContentLoaded', () => {
             const timeLabel = session === 'morning' ? '☀️ វេនព្រឹក (០៧:០០ - ០៩:០០)' : '🌙 វេនល្ងាច (១៧:០០ - ១៩:០០)';
             autoSessionText.innerHTML = isAuto ? `ស្វ័យប្រវត្តិ៖ <strong>${timeLabel}</strong>` : `ជ្រើសរើស៖ <strong>${timeLabel}</strong>`;
         }
+        if (btnSessionSwitch) {
+            btnSessionSwitch.innerHTML = session === 'morning' ? '☀️ វេនព្រឹក (០៧:០០ - ០៩:០០)' : '🌙 វេនល្ងាច (១៧:០០ - ១៩:០០)';
+        }
     }
 
     if (sessionToggle) {
         sessionToggle.addEventListener('change', (e) => {
             updateSessionUI(e.target.value, false);
             loadDailyAttendance();
+        });
+    }
+
+    // Toggle Session via Switch Button (☀️ វេនព្រឹក <-> 🌙 វេនល្ងាច)
+    if (btnSessionSwitch) {
+        btnSessionSwitch.addEventListener('click', () => {
+            const newSession = currentSession === 'morning' ? 'evening' : 'morning';
+            updateSessionUI(newSession, false);
+            loadDailyAttendance();
+            const sessionLabel = newSession === 'morning' ? 'ព្រឹក' : 'ល្ងាច';
+            showToast(`បានផ្លាស់ប្តូរទៅ វេន${sessionLabel}!`);
         });
     }
 
@@ -174,21 +188,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (dailyClassSelect) dailyClassSelect.addEventListener('change', loadDailyAttendance);
     if (attendanceDateInput) attendanceDateInput.addEventListener('change', loadDailyAttendance);
-
-    // Mark All Present
-    if (btnMarkAllPresent) {
-        btnMarkAllPresent.addEventListener('click', () => {
-            Object.keys(currentDailyState).forEach(id => {
-                currentDailyState[id] = 'present';
-            });
-            monkListContainer.querySelectorAll('.status-btn-group').forEach(group => {
-                group.querySelectorAll('.status-opt-btn').forEach(b => b.classList.remove('active'));
-                const presentBtn = group.querySelector('[data-status="present"]');
-                if (presentBtn) presentBtn.classList.add('active');
-            });
-            showToast('កំណត់វត្តមានទាំងអស់រួចរាល់!');
-        });
-    }
 
     // Save Daily Attendance
     if (btnSaveDaily) {
@@ -360,7 +359,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const searchQuery = (statsSearchInput.value || '').trim().toLowerCase();
         const dateList = getDateRangeList(refDateStr, currentStatsRange);
 
-        // Update Label
         if (statsTimeframeLabel) {
             const rangeLabelMap = { 'day': '១ ថ្ងៃ', 'week': '១ អាទិត្យ (៧ ថ្ងៃ)', 'month': '១ ខែ' };
             statsTimeframeLabel.textContent = rangeLabelMap[currentStatsRange] || '១ ថ្ងៃ';
@@ -371,7 +369,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let absentTotal = 0;
         let lateTotal = 0;
 
-        // Filter Target Students
         let targetStudents = students;
         if (selectedClass !== 'all') {
             targetStudents = students.filter(s => s.classId === parseInt(selectedClass));
@@ -381,7 +378,6 @@ document.addEventListener('DOMContentLoaded', () => {
             targetStudents = targetStudents.filter(s => s.name.toLowerCase().includes(searchQuery));
         }
 
-        // Student-by-Student Attendance Stats Engine
         const studentStats = targetStudents.map(student => {
             let sPresent = 0;
             let sLeave = 0;
@@ -426,13 +422,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const grandTotalChecks = presentTotal + leaveTotal + absentTotal + lateTotal;
         const presentPercentage = grandTotalChecks > 0 ? Math.round((presentTotal / grandTotalChecks) * 100) : 100;
 
-        // Render KPI Values
         if (kpiPresent) kpiPresent.innerHTML = `${toKhmerNum(presentTotal)} (${toKhmerNum(presentPercentage)}%)`;
         if (kpiLeave) kpiLeave.innerHTML = `${toKhmerNum(leaveTotal)}`;
         if (kpiAbsent) kpiAbsent.innerHTML = `${toKhmerNum(absentTotal)}`;
         if (kpiLate) kpiLate.innerHTML = `${toKhmerNum(lateTotal)}`;
 
-        // Render Per-Student Cards Breakdown
         if (statsStudentBreakdown) {
             if (studentStats.length === 0) {
                 statsStudentBreakdown.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 30px;">មិនមានសមណសិស្សសមស្របតាមការស្វែងរកឡើយ</div>`;
