@@ -673,6 +673,9 @@ document.addEventListener('DOMContentLoaded', () => {
             buddhistTable.style.zoom = '1.0';
             buddhistTable.style.transform = '';
             showToast('↺ បានកំណត់មកទំហំដើម (100%)');
+        });
+    }
+
     const btnClearAttendance = document.getElementById('btn-clear-attendance');
     if (btnClearAttendance) {
         btnClearAttendance.addEventListener('click', () => {
