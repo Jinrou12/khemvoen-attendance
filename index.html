@@ -102,20 +102,20 @@
         <!-- TAB 1: Monthly Attendance Summary Table -->
         <section id="tab-monthly" class="tab-panel">
             <div class="buddhist-card bodhi-card-bg">
-                <div class="card-title">
+                <div class="card-title" style="flex-wrap: wrap; gap: 10px; align-items: center;">
                     <span>📋 តារាងស្រង់អវត្តមានប្រចាំខែ (១ខែ)</span>
-                    <div style="display: flex; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-left: auto;">
+                        <div class="date-input-wrapper" id="monthly-date-wrapper" style="cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 7px 12px; min-width: 140px;">
+                            <span class="date-icon">📅</span>
+                            <input type="date" id="monthly-date-picker" class="form-control date-picker-input" style="font-size: 0.9rem; cursor: pointer; flex: 1; text-align: left; border: none; background: transparent; color: inherit; outline: none; min-width: 110px;">
+                        </div>
                         <button type="button" id="btn-export-excel" class="btn btn-secondary">📥 Export Excel</button>
                         <button type="button" id="btn-print-report" class="btn btn-secondary">🖨️ បោះពុម្ព</button>
                     </div>
                 </div>
 
-                <!-- Filters: Date Picker + View Mode Toggle (side by side) -->
-                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap;">
-                    <div class="date-input-wrapper" id="monthly-date-wrapper" style="cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 10px 14px; flex: 1; min-width: 160px;">
-                        <span class="date-icon">📅</span>
-                        <input type="date" id="monthly-date-picker" class="form-control date-picker-input" style="font-size: 1rem; cursor: pointer; flex: 1; text-align: left;">
-                    </div>
+                <!-- View Mode Toggle (side by side, below title) -->
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
                     <div class="view-mode-toggle" style="display: flex; gap: 6px; background: rgba(10,5,3,0.85); padding: 4px; border-radius: 8px; border: 1px solid var(--border-gold); flex-shrink: 0;">
                         <button type="button" class="btn-view-mode active" id="btn-view-single-day" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 6px; cursor: pointer;">
                             📅 ១ ថ្ងៃ
@@ -125,6 +125,7 @@
                         </button>
                     </div>
                 </div>
+
 
                 <!-- Day Selector (shown only in single-day mode) -->
                 <div id="single-day-selector" style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
