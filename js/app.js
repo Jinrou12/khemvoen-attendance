@@ -455,10 +455,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         headerHTML += `
-                <th class="col-summary" title="វត្តមាន">វត្ត</th>
-                <th class="col-summary" title="ច្បាប់">ច្បាប់</th>
-                <th class="col-summary" title="អវត្តមាន">អវត្ត</th>
-                <th class="col-summary" title="យឺត">យឺត</th>
             </tr>
         `;
         monthlyTableHeader.innerHTML = headerHTML;
@@ -556,10 +552,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td class="col-no">${toKhmerNum(idx + 1)}</td>
                     <td class="col-name text-left"><strong>${item.student.name}</strong></td>
                     ${rowDaysHTML}
-                    <td class="col-summary" style="color: var(--status-present); font-weight: bold;">${toKhmerNum(item.presentCount)}</td>
-                    <td class="col-summary" style="color: var(--status-leave); font-weight: bold;">${toKhmerNum(item.leaveCount)}</td>
-                    <td class="col-summary" style="color: var(--status-absent); font-weight: bold;">${toKhmerNum(item.absentCount)}</td>
-                    <td class="col-summary" style="color: var(--status-late); font-weight: bold;">${toKhmerNum(item.lateCount)}</td>
                 </tr>
             `;
         });
