@@ -35,6 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnPrintReport = document.getElementById('btn-print-report');
     const monthlyTableHeader = document.getElementById('monthly-table-header');
     const monthlyTableBody = document.getElementById('monthly-table-body');
+    const singleDaySelector = document.getElementById('single-day-selector');
+    const monthlyDaySelect = document.getElementById('monthly-day-select');
+    const btnDayPrev = document.getElementById('btn-day-prev');
+    const btnDayNext = document.getElementById('btn-day-next');
 
     // Tab 3 Elements (Statistics Dashboard)
     const statsClassSelect = document.getElementById('stats-class-select');
@@ -308,6 +312,31 @@ document.addEventListener('DOMContentLoaded', () => {
     let monthlyReportViewMode = 'single'; // 'single' or 'full'
     let monthlySortFilter = 'all'; // 'all', 'absent', 'leave', 'late'
 
+    // Populate day selector options based on selected month/year
+    function populateDayOptions() {
+        if (!monthlyDaySelect || !monthlyDatePicker) return;
+        const dateVal = monthlyDatePicker.value || todayStr;
+        const parts = dateVal.split('-');
+        const year = parseInt(parts[0]);
+        const month = parseInt(parts[1]);
+        const currentSelectedDay = parseInt(monthlyDaySelect.value) || parseInt(parts[2]) || 1;
+        const daysInMonth = new Date(year, month, 0).getDate();
+
+        monthlyDaySelect.innerHTML = '';
+        for (let d = 1; d <= daysInMonth; d++) {
+            const opt = document.createElement('option');
+            opt.value = d;
+            opt.textContent = `ថ្ងៃទី ${toKhmerNum(d)}`;
+            if (d === currentSelectedDay) opt.selected = true;
+            monthlyDaySelect.appendChild(opt);
+        }
+    }
+
+    function updateSingleDaySelectorVisibility() {
+        if (!singleDaySelector) return;
+        singleDaySelector.style.display = (monthlyReportViewMode === 'single') ? 'flex' : 'none';
+    }
+
     function updateMonthlyFilterUI(filterName) {
         monthlySortFilter = filterName;
         [monthlyFilterA, monthlyFilterP, monthlyFilterL, monthlyFilterAll].forEach(btn => {
@@ -331,6 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
             monthlyReportViewMode = 'single';
             btnViewSingleDay.classList.add('active');
             if (btnViewFullMonth) btnViewFullMonth.classList.remove('active');
+            updateSingleDaySelectorVisibility();
             renderMonthlyReport();
         });
     }
@@ -339,7 +369,34 @@ document.addEventListener('DOMContentLoaded', () => {
             monthlyReportViewMode = 'full';
             btnViewFullMonth.classList.add('active');
             if (btnViewSingleDay) btnViewSingleDay.classList.remove('active');
+            updateSingleDaySelectorVisibility();
             renderMonthlyReport();
+        });
+    }
+
+    if (monthlyDaySelect) {
+        monthlyDaySelect.addEventListener('change', renderMonthlyReport);
+    }
+
+    if (btnDayPrev) {
+        btnDayPrev.addEventListener('click', () => {
+            if (!monthlyDaySelect) return;
+            const currentDay = parseInt(monthlyDaySelect.value);
+            if (currentDay > 1) {
+                monthlyDaySelect.value = currentDay - 1;
+                renderMonthlyReport();
+            }
+        });
+    }
+    if (btnDayNext) {
+        btnDayNext.addEventListener('click', () => {
+            if (!monthlyDaySelect) return;
+            const currentDay = parseInt(monthlyDaySelect.value);
+            const maxDay = monthlyDaySelect.options.length;
+            if (currentDay < maxDay) {
+                monthlyDaySelect.value = currentDay + 1;
+                renderMonthlyReport();
+            }
         });
     }
 
@@ -348,13 +405,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const parts = dateVal.split('-');
         const year = parseInt(parts[0] || '2026');
         const month = parseInt(parts[1] || '8');
-        const selectedDay = parseInt(parts[2] || '29');
 
         const daysInMonth = new Date(year, month, 0).getDate();
 
-        // Update Selected Day Label on View Mode button
-        const selectedDayLabel = document.getElementById('selected-day-label');
-        if (selectedDayLabel) selectedDayLabel.textContent = toKhmerNum(selectedDay);
+        // Rebuild day options when month changes
+        populateDayOptions();
+        updateSingleDaySelectorVisibility();
+
+        // Get selected day from dropdown (independent of date picker's day)
+        const selectedDay = monthlyDaySelect ? (parseInt(monthlyDaySelect.value) || 1) : parseInt(parts[2] || '1');
 
         // Determine which days to display in table
         const daysToDisplay = (monthlyReportViewMode === 'single')
