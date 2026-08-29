@@ -70,12 +70,23 @@
                     </div>
                 </div>
 
-                <!-- Tool Legend for Attendance Taking (Single box per student, click to select P, A, L buttons) -->
-                <div class="attendance-tool-legend">
-                    <div class="legend-item"><span class="single-box-demo demo-present"></span> ប្រអបទទេ = បានមក</div>
-                    <div class="legend-item"><span class="single-box-demo demo-leave">P</span> = ច្បាប់</div>
-                    <div class="legend-item"><span class="single-box-demo demo-absent">A</span> = អវត្តមាន</div>
-                    <div class="legend-item"><span class="single-box-demo demo-late">L</span> = យឺត</div>
+                <!-- Tool Selection Bar for Attendance Taking (Select tool button A, P, L then click student box) -->
+                <div class="attendance-toolbar">
+                    <span class="toolbar-title">👇 ជ្រើសរើសប្រភេទ (Tool) ៖</span>
+                    <div class="tool-buttons-group">
+                        <button type="button" class="tool-select-btn btn-a active" data-tool="absent" title="ជ្រើសរើស អវត្តមាន (Absent)">
+                            <span class="tool-badge badge-a">A</span> អវត្តមាន
+                        </button>
+                        <button type="button" class="tool-select-btn btn-p" data-tool="leave" title="ជ្រើសរើស ច្បាប់ (Leave)">
+                            <span class="tool-badge badge-p">P</span> ច្បាប់
+                        </button>
+                        <button type="button" class="tool-select-btn btn-l" data-tool="late" title="ជ្រើសរើស យឺត (Late)">
+                            <span class="tool-badge badge-l">L</span> យឺត
+                        </button>
+                        <button type="button" class="tool-select-btn btn-present" data-tool="present" title="បានមក / វត្តមាន (Present)">
+                            <span class="tool-icon demo-present-icon">✓</span> បានមក
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Monks / Students List (7 per class with 1 Empty Box) -->

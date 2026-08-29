@@ -395,47 +395,115 @@ body {
     transform: translateY(-1px);
 }
 
-/* Single Box Tool Legend & Demo */
-.attendance-tool-legend {
+/* Interactive Toolbar Selector (A, P, L, Present Tool Mode) */
+.attendance-toolbar {
     display: flex;
     align-items: center;
-    gap: 16px;
+    justify-content: space-between;
+    gap: 12px;
     margin-bottom: 16px;
-    font-size: 0.88rem;
-    color: var(--text-gold);
     flex-wrap: wrap;
-    background: rgba(10, 5, 3, 0.6);
-    padding: 8px 14px;
-    border-radius: 8px;
-    border: 1px solid rgba(212, 175, 55, 0.25);
+    background: rgba(12, 6, 4, 0.85);
+    padding: 10px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--border-gold);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
-.legend-item {
+.toolbar-title {
+    font-size: 0.95rem;
+    color: var(--text-gold);
+    font-weight: 700;
+}
+
+.tool-buttons-group {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
-.demo-present-indicator {
+.tool-select-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(212, 175, 55, 0.28);
+    background: rgba(10, 5, 3, 0.75);
+    color: var(--text-muted);
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    user-select: none;
+}
+
+.tool-select-btn:hover {
+    transform: translateY(-2px);
+    border-color: var(--gold-bright);
+    color: var(--gold-bright);
+}
+
+.tool-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 26px;
-    height: 26px;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    font-weight: 800;
+    font-size: 0.85rem;
+}
+
+.badge-a { background: var(--status-absent); color: #fff; }
+.badge-p { background: var(--status-leave); color: #120a07; }
+.badge-l { background: var(--status-late); color: #fff; }
+.demo-present-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
     border-radius: 6px;
     border: 1px dashed var(--status-present);
     color: var(--status-present);
     font-weight: bold;
-    font-size: 0.9rem;
 }
 
-.demo-btn {
-    width: 28px !important;
-    height: 28px !important;
-    font-size: 0.88rem !important;
-    border-radius: 6px !important;
-    pointer-events: none;
-    transform: none !important;
+/* Active Tool Button Highlight States */
+.tool-select-btn.btn-a.active {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    border-color: #ff6b6b;
+    color: #ffffff;
+    box-shadow: 0 0 14px rgba(231, 76, 60, 0.65);
+    transform: scale(1.04);
+}
+
+.tool-select-btn.btn-p.active {
+    background: linear-gradient(135deg, #f39c12, #f1c40f);
+    border-color: #f1c40f;
+    color: #120a07;
+    box-shadow: 0 0 14px rgba(243, 156, 18, 0.65);
+    transform: scale(1.04);
+}
+
+.tool-select-btn.btn-l.active {
+    background: linear-gradient(135deg, #e67e22, #d35400);
+    border-color: #ff9f43;
+    color: #ffffff;
+    box-shadow: 0 0 14px rgba(230, 126, 34, 0.65);
+    transform: scale(1.04);
+}
+
+.tool-select-btn.btn-present.active {
+    background: rgba(46, 204, 113, 0.22);
+    border-color: var(--status-present);
+    color: var(--status-present);
+    box-shadow: 0 0 12px rgba(46, 204, 113, 0.4);
+    transform: scale(1.04);
 }
 
 /* Control Row & Filters */
