@@ -47,11 +47,9 @@
                     <span>✍️ កត់ត្រាអវត្តមានប្រចាំថ្ងៃ</span>
                     <div class="card-title-controls">
                         <!-- Date Picker Field -->
-                        <div class="date-input-wrapper">
-                            <button type="button" id="btn-daily-prev-day" class="date-nav-arrow-btn" title="ថ្ងៃមុន">◀</button>
+                        <div class="date-input-wrapper" id="daily-date-wrapper" style="cursor: pointer;">
                             <span class="date-icon">📅</span>
-                            <input type="date" id="attendance-date" class="form-control date-picker-input">
-                            <button type="button" id="btn-daily-next-day" class="date-nav-arrow-btn" title="ថ្ងៃបន្ទាប់">▶</button>
+                            <input type="date" id="attendance-date" class="form-control date-picker-input" style="cursor: pointer;">
                         </div>
                         <!-- Session Switcher Button (☀️ វេនព្រឹក / 🌙 វេនល្ងាច) -->
                         <button type="button" class="btn btn-primary" id="btn-session-switch">☀️ វេនព្រឹក</button>
@@ -117,22 +115,9 @@
 
                     <div class="form-group" style="grid-column: 1 / -1;">
                         <label for="monthly-date-picker">🗓️ ជ្រើសរើស ថ្ងៃ ខែ និងឆ្នាំ ៖</label>
-                        <div style="display: flex; gap: 8px; flex-direction: column;">
-                            <input type="date" id="monthly-date-picker" class="form-control" style="font-size: 1rem; text-align: center; padding: 10px;">
-                            <div class="date-switch-btn-group">
-                                <button type="button" id="btn-monthly-prev-month" class="btn btn-secondary date-shift-btn">
-                                    ◀ ខែមុន
-                                </button>
-                                <button type="button" id="btn-monthly-prev-day" class="btn btn-secondary date-shift-btn">
-                                    ◀ ថ្ងៃមុន
-                                </button>
-                                <button type="button" id="btn-monthly-next-day" class="btn btn-secondary date-shift-btn">
-                                    ថ្ងៃបន្ទាប់ ▶
-                                </button>
-                                <button type="button" id="btn-monthly-next-month" class="btn btn-secondary date-shift-btn">
-                                    ខែបន្ទាប់ ▶
-                                </button>
-                            </div>
+                        <div class="date-input-wrapper" id="monthly-date-wrapper" style="cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 10px 14px;">
+                            <span class="date-icon">📅</span>
+                            <input type="date" id="monthly-date-picker" class="form-control date-picker-input" style="font-size: 1rem; cursor: pointer; flex: 1; text-align: left;">
                         </div>
                     </div>
                 </div>

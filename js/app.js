@@ -24,12 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Tab 1 Elements (Monthly Report)
     const monthlyClassSelect = document.getElementById('monthly-class-select');
     const monthlyDatePicker = document.getElementById('monthly-date-picker');
-    const btnMonthlyPrevMonth = document.getElementById('btn-monthly-prev-month');
-    const btnMonthlyNextMonth = document.getElementById('btn-monthly-next-month');
-    const btnMonthlyPrevDay = document.getElementById('btn-monthly-prev-day');
-    const btnMonthlyNextDay = document.getElementById('btn-monthly-next-day');
-    const btnDailyPrevDay = document.getElementById('btn-daily-prev-day');
-    const btnDailyNextDay = document.getElementById('btn-daily-next-day');
     const btnFilterMonthly = document.getElementById('btn-filter-monthly');
     const btnExportExcel = document.getElementById('btn-export-excel');
     const btnPrintReport = document.getElementById('btn-print-report');
@@ -69,6 +63,28 @@ document.addEventListener('DOMContentLoaded', () => {
     if (attendanceDateInput) attendanceDateInput.value = todayStr;
     if (statsDateSelect) statsDateSelect.value = todayStr;
     if (monthlyDatePicker) monthlyDatePicker.value = todayStr;
+
+    // Helper: Trigger native Calendar Picker popup on click anywhere on date box
+    function setupCalendarPickerAutoPopup(inputEl, wrapperEl) {
+        if (!inputEl) return;
+        const triggerPicker = () => {
+            if (typeof inputEl.showPicker === 'function') {
+                try {
+                    inputEl.showPicker();
+                } catch (e) {
+                    console.log('showPicker popup:', e);
+                }
+            }
+        };
+
+        inputEl.addEventListener('click', triggerPicker);
+        if (wrapperEl) wrapperEl.addEventListener('click', (e) => {
+            if (e.target !== inputEl) triggerPicker();
+        });
+    }
+
+    setupCalendarPickerAutoPopup(attendanceDateInput, document.getElementById('daily-date-wrapper'));
+    setupCalendarPickerAutoPopup(monthlyDatePicker, document.getElementById('monthly-date-wrapper'));
 
     // -------------------------------------------------------------
     // Smart Session Detection ( morning vs evening )
@@ -375,56 +391,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (btnFilterMonthly) btnFilterMonthly.addEventListener('click', renderMonthlyReport);
     if (monthlyDatePicker) monthlyDatePicker.addEventListener('change', renderMonthlyReport);
-
-    if (btnMonthlyPrevMonth) {
-        btnMonthlyPrevMonth.addEventListener('click', () => {
-            if (monthlyDatePicker) {
-                monthlyDatePicker.value = shiftDate(monthlyDatePicker.value, 0, -1);
-                renderMonthlyReport();
-            }
-        });
-    }
-    if (btnMonthlyNextMonth) {
-        btnMonthlyNextMonth.addEventListener('click', () => {
-            if (monthlyDatePicker) {
-                monthlyDatePicker.value = shiftDate(monthlyDatePicker.value, 0, 1);
-                renderMonthlyReport();
-            }
-        });
-    }
-    if (btnMonthlyPrevDay) {
-        btnMonthlyPrevDay.addEventListener('click', () => {
-            if (monthlyDatePicker) {
-                monthlyDatePicker.value = shiftDate(monthlyDatePicker.value, -1, 0);
-                renderMonthlyReport();
-            }
-        });
-    }
-    if (btnMonthlyNextDay) {
-        btnMonthlyNextDay.addEventListener('click', () => {
-            if (monthlyDatePicker) {
-                monthlyDatePicker.value = shiftDate(monthlyDatePicker.value, 1, 0);
-                renderMonthlyReport();
-            }
-        });
-    }
-
-    if (btnDailyPrevDay) {
-        btnDailyPrevDay.addEventListener('click', () => {
-            if (attendanceDateInput) {
-                attendanceDateInput.value = shiftDate(attendanceDateInput.value, -1, 0);
-                loadDailyAttendance();
-            }
-        });
-    }
-    if (btnDailyNextDay) {
-        btnDailyNextDay.addEventListener('click', () => {
-            if (attendanceDateInput) {
-                attendanceDateInput.value = shiftDate(attendanceDateInput.value, 1, 0);
-                loadDailyAttendance();
-            }
-        });
-    }
 
     if (btnExportExcel) {
         btnExportExcel.addEventListener('click', () => {
