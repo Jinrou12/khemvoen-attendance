@@ -189,13 +189,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function loadDailyAttendance() {
         const date = attendanceDateInput.value;
-        const classId = parseInt(dailyClassSelect ? dailyClassSelect.value : 1);
         const session = currentSession;
 
-        const recordKey = `${date}_${session}_class_${classId}`;
-        const savedRecords = attendanceRecords[recordKey] || {};
+        const recordKey = `${date}_${session}`;
+        const savedRecords = attendanceRecords[recordKey] || attendanceRecords[`${date}_${session}_class_1`] || {};
 
-        const classStudents = students.filter(s => s.classId === classId);
+        const classStudents = students;
 
         monkListContainer.innerHTML = '';
 
@@ -248,15 +247,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnSaveDaily) {
         btnSaveDaily.addEventListener('click', () => {
             const date = attendanceDateInput.value;
-            const classId = parseInt(dailyClassSelect ? dailyClassSelect.value : 1);
             const session = currentSession;
 
-            const recordKey = `${date}_${session}_class_${classId}`;
+            const recordKey = `${date}_${session}`;
             attendanceRecords[recordKey] = { ...currentDailyState };
+            classes.forEach(c => {
+                attendanceRecords[`${date}_${session}_class_${c.id}`] = { ...currentDailyState };
+            });
             setStoredData('buddhist_attendance', attendanceRecords);
 
             const sessionLabel = session === 'morning' ? 'ព្រឹក' : 'ល្ងាច';
-            showToast(`រក្សាទុកអវត្តមាន ថ្នាក់ទី ${toKhmerNum(classId)} វេន${sessionLabel} រួចរាល់!`);
+            showToast(`រក្សាទុកអវត្តមាន វេន${sessionLabel} រួចរាល់!`);
         });
     }
 
