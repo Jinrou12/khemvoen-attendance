@@ -123,11 +123,22 @@
                     <button type="button" id="btn-filter-monthly" class="btn btn-primary">🔍 មើលរបាយការណ៍</button>
                 </div>
 
-                <!-- Legend -->
-                <div style="display: flex; gap: 15px; margin-bottom: 15px; font-size: 0.88rem; flex-wrap: wrap; align-items: center;">
-                    <div><span class="cell-badge cell-a">A</span> = អវត្តមាន (Absent)</div>
-                    <div><span class="cell-badge cell-p">P</span> = ច្បាប់ (Permission)</div>
-                    <div><span class="cell-badge cell-l">L</span> = យឺត (Late)</div>
+                <!-- Legend Bar (Matching Tab 2 Toolbar) -->
+                <div class="attendance-toolbar" style="margin-bottom: 15px;">
+                    <div class="tool-buttons-group">
+                        <div class="tool-select-btn btn-a" style="cursor: default;" title="អវត្តមាន (A)">
+                            A
+                        </div>
+                        <div class="tool-select-btn btn-p" style="cursor: default;" title="ច្បាប់ (P)">
+                            P
+                        </div>
+                        <div class="tool-select-btn btn-l" style="cursor: default;" title="យឺត (L)">
+                            L
+                        </div>
+                        <div class="tool-select-btn btn-present" style="cursor: default;" title="បានមក (វត្តមាន)">
+                            <span class="demo-empty-box"></span>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Responsive Monthly Table -->
