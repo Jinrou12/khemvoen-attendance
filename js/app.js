@@ -331,6 +331,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (d === currentSelectedDay) opt.selected = true;
             monthlyDaySelect.appendChild(opt);
         }
+
+        // Update visible label
+        const dayLabel = document.getElementById('monthly-day-label');
+        if (dayLabel) dayLabel.textContent = `ថ្ងៃទី ${toKhmerNum(currentSelectedDay)}`;
     }
 
     function updateSingleDaySelectorVisibility() {
@@ -413,9 +417,12 @@ document.addEventListener('DOMContentLoaded', () => {
         populateDayOptions();
         updateSingleDaySelectorVisibility();
 
-        // Get selected day from dropdown (independent of date picker's day)
+        // Get selected day from hidden select
         const selectedDay = monthlyDaySelect ? (parseInt(monthlyDaySelect.value) || 1) : parseInt(parts[2] || '1');
 
+        // Update visible day label
+        const dayLabel = document.getElementById('monthly-day-label');
+        if (dayLabel) dayLabel.textContent = `ថ្ងៃទី ${toKhmerNum(selectedDay)}`;
         // Determine which days to display in table
         const daysToDisplay = (monthlyReportViewMode === 'single')
             ? [selectedDay]
