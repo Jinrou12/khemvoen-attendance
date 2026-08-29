@@ -558,6 +558,26 @@ body {
 .form-control:focus {
     border-color: var(--gold-bright);
     box-shadow: 0 0 10px rgba(255, 215, 0, 0.35);
+/* View Mode Switcher (Single Day vs Full Month) */
+.btn-view-mode {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-muted);
+    font-family: var(--font-body);
+    font-weight: 600;
+    transition: all 0.25s ease;
+}
+
+.btn-view-mode:hover {
+    color: var(--gold-bright);
+}
+
+.btn-view-mode.active {
+    background: linear-gradient(135deg, var(--gold-primary), var(--saffron-main));
+    color: #120a07;
+    font-weight: bold;
+    border-color: var(--gold-bright);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.35);
 }
 
 /* Timeframe Switcher (1 Day / 1 Week / 1 Month) */

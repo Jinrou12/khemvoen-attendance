@@ -126,21 +126,33 @@
                     <button type="button" id="btn-filter-monthly" class="btn btn-primary">🔍 មើលរបាយការណ៍</button>
                 </div>
 
-                <!-- Legend Bar (Matching Tab 2 Toolbar) -->
+                <!-- Single Day vs Full Month View Toggle -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                    <div class="view-mode-toggle" style="display: flex; gap: 6px; background: rgba(10,5,3,0.85); padding: 4px; border-radius: 8px; border: 1px solid var(--border-gold);">
+                        <button type="button" class="btn-view-mode active" id="btn-view-single-day" style="padding: 6px 12px; font-size: 0.85rem; border-radius: 6px; cursor: pointer;">
+                            📅 បង្ហាញតែថ្ងៃនេះ (<span id="selected-day-label">២៩</span>)
+                        </button>
+                        <button type="button" class="btn-view-mode" id="btn-view-full-month" style="padding: 6px 12px; font-size: 0.85rem; border-radius: 6px; cursor: pointer;">
+                            🗓️ បង្ហាញពេញមួយខែ
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Interactive Filter Toolbar (A, P, L, 🔲) -->
                 <div class="attendance-toolbar" style="margin-bottom: 15px;">
                     <div class="tool-buttons-group">
-                        <div class="tool-select-btn btn-a" style="cursor: default;" title="អវត្តមាន (A)">
+                        <button type="button" class="tool-select-btn btn-a" id="monthly-filter-a" title="តម្រៀបអវត្តមានពីច្រើនទៅតិច (A)">
                             A
-                        </div>
-                        <div class="tool-select-btn btn-p" style="cursor: default;" title="ច្បាប់ (P)">
+                        </button>
+                        <button type="button" class="tool-select-btn btn-p" id="monthly-filter-p" title="តម្រៀបច្បាប់ពីច្រើនទៅតិច (P)">
                             P
-                        </div>
-                        <div class="tool-select-btn btn-l" style="cursor: default;" title="យឺត (L)">
+                        </button>
+                        <button type="button" class="tool-select-btn btn-l" id="monthly-filter-l" title="តម្រៀបយឺតពីច្រើនទៅតិច (L)">
                             L
-                        </div>
-                        <div class="tool-select-btn btn-present" style="cursor: default;" title="បានមក (វត្តមាន)">
+                        </button>
+                        <button type="button" class="tool-select-btn btn-present active" id="monthly-filter-all" title="បង្ហាញទាំងអស់ (គ្រប់សិស្ស)">
                             <span class="demo-empty-box"></span>
-                        </div>
+                        </button>
                     </div>
                 </div>
 

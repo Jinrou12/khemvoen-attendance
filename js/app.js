@@ -24,6 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Tab 1 Elements (Monthly Report)
     const monthlyClassSelect = document.getElementById('monthly-class-select');
     const monthlyDatePicker = document.getElementById('monthly-date-picker');
+    const btnViewSingleDay = document.getElementById('btn-view-single-day');
+    const btnViewFullMonth = document.getElementById('btn-view-full-month');
+    const monthlyFilterA = document.getElementById('monthly-filter-a');
+    const monthlyFilterP = document.getElementById('monthly-filter-p');
+    const monthlyFilterL = document.getElementById('monthly-filter-l');
+    const monthlyFilterAll = document.getElementById('monthly-filter-all');
     const btnFilterMonthly = document.getElementById('btn-filter-monthly');
     const btnExportExcel = document.getElementById('btn-export-excel');
     const btnPrintReport = document.getElementById('btn-print-report');
@@ -299,24 +305,72 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------------------------------------------------
     // TAB 1: Monthly Attendance Summary Report
     // -------------------------------------------------------------
+    let monthlyReportViewMode = 'single'; // 'single' or 'full'
+    let monthlySortFilter = 'all'; // 'all', 'absent', 'leave', 'late'
+
+    function updateMonthlyFilterUI(filterName) {
+        monthlySortFilter = filterName;
+        [monthlyFilterA, monthlyFilterP, monthlyFilterL, monthlyFilterAll].forEach(btn => {
+            if (btn) btn.classList.remove('active');
+        });
+        if (filterName === 'absent' && monthlyFilterA) monthlyFilterA.classList.add('active');
+        if (filterName === 'leave' && monthlyFilterP) monthlyFilterP.classList.add('active');
+        if (filterName === 'late' && monthlyFilterL) monthlyFilterL.classList.add('active');
+        if (filterName === 'all' && monthlyFilterAll) monthlyFilterAll.classList.add('active');
+
+        renderMonthlyReport();
+    }
+
+    if (monthlyFilterA) monthlyFilterA.addEventListener('click', () => updateMonthlyFilterUI('absent'));
+    if (monthlyFilterP) monthlyFilterP.addEventListener('click', () => updateMonthlyFilterUI('leave'));
+    if (monthlyFilterL) monthlyFilterL.addEventListener('click', () => updateMonthlyFilterUI('late'));
+    if (monthlyFilterAll) monthlyFilterAll.addEventListener('click', () => updateMonthlyFilterUI('all'));
+
+    if (btnViewSingleDay) {
+        btnViewSingleDay.addEventListener('click', () => {
+            monthlyReportViewMode = 'single';
+            btnViewSingleDay.classList.add('active');
+            if (btnViewFullMonth) btnViewFullMonth.classList.remove('active');
+            renderMonthlyReport();
+        });
+    }
+    if (btnViewFullMonth) {
+        btnViewFullMonth.addEventListener('click', () => {
+            monthlyReportViewMode = 'full';
+            btnViewFullMonth.classList.add('active');
+            if (btnViewSingleDay) btnViewSingleDay.classList.remove('active');
+            renderMonthlyReport();
+        });
+    }
+
     function renderMonthlyReport() {
         const dateVal = (monthlyDatePicker && monthlyDatePicker.value) ? monthlyDatePicker.value : todayStr;
         const parts = dateVal.split('-');
         const year = parseInt(parts[0] || '2026');
         const month = parseInt(parts[1] || '8');
-        const selectedClass = monthlyClassSelect ? monthlyClassSelect.value : 'all';
+        const selectedDay = parseInt(parts[2] || '29');
 
         const daysInMonth = new Date(year, month, 0).getDate();
 
+        // Update Selected Day Label on View Mode button
+        const selectedDayLabel = document.getElementById('selected-day-label');
+        if (selectedDayLabel) selectedDayLabel.textContent = toKhmerNum(selectedDay);
+
+        // Determine which days to display in table
+        const daysToDisplay = (monthlyReportViewMode === 'single')
+            ? [selectedDay]
+            : Array.from({ length: daysInMonth }, (_, i) => i + 1);
+
+        // Build Table Header
         let headerHTML = `
             <tr>
                 <th style="width: 50px;">ល.រ</th>
                 <th style="min-width: 170px;" class="text-left">គោរមងេ-នាម</th>
         `;
 
-        for (let d = 1; d <= daysInMonth; d++) {
-            headerHTML += `<th style="width: 32px;">${toKhmerNum(d)}</th>`;
-        }
+        daysToDisplay.forEach(d => {
+            headerHTML += `<th style="width: 45px;">${toKhmerNum(d)}</th>`;
+        });
 
         headerHTML += `
                 <th style="min-width: 50px;" title="វត្តមាន">វត្ត</th>
@@ -327,19 +381,13 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         monthlyTableHeader.innerHTML = headerHTML;
 
-        let targetStudents = students;
-        if (selectedClass !== 'all') {
-            targetStudents = students.filter(s => s.classId === parseInt(selectedClass));
-        }
-
-        let bodyHTML = '';
-        targetStudents.forEach((student, idx) => {
+        // Calculate student totals across full month for sorting & rendering
+        let studentDataList = students.map(student => {
             let presentCount = 0;
             let leaveCount = 0;
             let absentCount = 0;
             let lateCount = 0;
-
-            let rowDaysHTML = '';
+            const dayStatuses = {};
 
             for (let d = 1; d <= daysInMonth; d++) {
                 const dayStr = String(d).padStart(2, '0');
@@ -369,19 +417,45 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else if (mStatus === 'present' || eStatus === 'present') {
                     dayBadge = `-`;
                 }
-
-                rowDaysHTML += `<td>${dayBadge}</td>`;
+                dayStatuses[d] = dayBadge;
             }
+
+            return {
+                student,
+                presentCount,
+                leaveCount,
+                absentCount,
+                lateCount,
+                dayStatuses
+            };
+        });
+
+        // Apply Sorting by Filter (ពីច្រើនទៅតិច / Most to Least)
+        if (monthlySortFilter === 'absent') {
+            studentDataList.sort((a, b) => b.absentCount - a.absentCount);
+        } else if (monthlySortFilter === 'leave') {
+            studentDataList.sort((a, b) => b.leaveCount - a.leaveCount);
+        } else if (monthlySortFilter === 'late') {
+            studentDataList.sort((a, b) => b.lateCount - a.lateCount);
+        }
+
+        // Build Table Body
+        let bodyHTML = '';
+        studentDataList.forEach((item, idx) => {
+            let rowDaysHTML = '';
+            daysToDisplay.forEach(d => {
+                rowDaysHTML += `<td>${item.dayStatuses[d] || '-'}</td>`;
+            });
 
             bodyHTML += `
                 <tr>
                     <td>${toKhmerNum(idx + 1)}</td>
-                    <td class="text-left"><strong>${student.name}</strong></td>
+                    <td class="text-left"><strong>${item.student.name}</strong></td>
                     ${rowDaysHTML}
-                    <td style="color: var(--status-present); font-weight: bold;">${toKhmerNum(presentCount)}</td>
-                    <td style="color: var(--status-leave); font-weight: bold;">${toKhmerNum(leaveCount)}</td>
-                    <td style="color: var(--status-absent); font-weight: bold;">${toKhmerNum(absentCount)}</td>
-                    <td style="color: var(--status-late); font-weight: bold;">${toKhmerNum(lateCount)}</td>
+                    <td style="color: var(--status-present); font-weight: bold;">${toKhmerNum(item.presentCount)}</td>
+                    <td style="color: var(--status-leave); font-weight: bold;">${toKhmerNum(item.leaveCount)}</td>
+                    <td style="color: var(--status-absent); font-weight: bold;">${toKhmerNum(item.absentCount)}</td>
+                    <td style="color: var(--status-late); font-weight: bold;">${toKhmerNum(item.lateCount)}</td>
                 </tr>
             `;
         });
