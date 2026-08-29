@@ -114,7 +114,7 @@
                     </div>
                 </div>
 
-                <!-- View Mode Toggle (side by side, below title) -->
+                <!-- View Mode Toggle + Name Search (side by side) -->
                 <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
                     <div class="view-mode-toggle" style="display: flex; gap: 6px; background: rgba(10,5,3,0.85); padding: 4px; border-radius: 8px; border: 1px solid var(--border-gold); flex-shrink: 0;">
                         <button type="button" class="btn-view-mode active" id="btn-view-single-day" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 6px; cursor: pointer;">
@@ -124,7 +124,12 @@
                             🗓️ ពេញខែ
                         </button>
                     </div>
+                    <div style="display: flex; align-items: center; gap: 6px; background: rgba(10,5,3,0.85); border: 1px solid var(--border-gold); border-radius: 8px; padding: 6px 10px; flex: 1; min-width: 120px;">
+                        <span style="color: var(--text-gold); font-size: 1rem;">🔍</span>
+                        <input type="text" id="monthly-search-name" placeholder="ស្វែករកឈ្មោះ..." class="form-control" style="border: none; background: transparent; outline: none; color: var(--text-primary); font-family: var(--font-body); font-size: 0.88rem; flex: 1; min-width: 80px; padding: 0;">
+                    </div>
                 </div>
+
 
 
                 <!-- Day Selector (shown only in single-day mode) -->

@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const monthlyDaySelect = document.getElementById('monthly-day-select');
     const btnDayPrev = document.getElementById('btn-day-prev');
     const btnDayNext = document.getElementById('btn-day-next');
+    const monthlySearchName = document.getElementById('monthly-search-name');
 
     // Tab 3 Elements (Statistics Dashboard)
     const statsClassSelect = document.getElementById('stats-class-select');
@@ -489,6 +490,14 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         });
 
+        // Apply Name Search Filter
+        const searchQuery = monthlySearchName ? monthlySearchName.value.trim().toLowerCase() : '';
+        if (searchQuery) {
+            studentDataList = studentDataList.filter(item =>
+                item.student.name.toLowerCase().includes(searchQuery)
+            );
+        }
+
         // Apply Sorting by Filter (ពីច្រើនទៅតិច / Most to Least)
         if (monthlySortFilter === 'absent') {
             studentDataList.sort((a, b) => b.absentCount - a.absentCount);
@@ -524,6 +533,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (btnFilterMonthly) btnFilterMonthly.addEventListener('click', renderMonthlyReport);
     if (monthlyDatePicker) monthlyDatePicker.addEventListener('change', renderMonthlyReport);
+    if (monthlySearchName) monthlySearchName.addEventListener('input', renderMonthlyReport);
 
     // Initial render on page load
     renderMonthlyReport();
