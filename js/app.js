@@ -169,13 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------------------------------------------------
     let currentDailyState = {};
 
-    function renderSingleBoxContent(status) {
-        if (status === 'absent') return '<span class="box-badge text-a">A</span>';
-        if (status === 'leave') return '<span class="box-badge text-p">P</span>';
-        if (status === 'late') return '<span class="box-badge text-l">L</span>';
-        return ''; // Completely Empty Box for Present / ได้មក
-    }
-
     function loadDailyAttendance() {
         const date = attendanceDateInput.value;
         const classId = parseInt(dailyClassSelect ? dailyClassSelect.value : 1);
@@ -202,31 +195,35 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="monk-sub">${student.title} • ID: ${student.id}</div>
                     </div>
                 </div>
-                <div class="single-box-wrapper" data-student-id="${student.id}">
-                    <button type="button" class="single-box-btn status-${status}" data-status="${status}">
-                        ${renderSingleBoxContent(status)}
-                    </button>
+                <div class="status-btn-group" data-student-id="${student.id}">
+                    <button type="button" class="status-btn btn-p ${status === 'leave' ? 'active' : ''}" data-status="leave" title="ច្បាប់ (Leave)">P</button>
+                    <button type="button" class="status-btn btn-a ${status === 'absent' ? 'active' : ''}" data-status="absent" title="អវត្តមាន (Absent)">A</button>
+                    <button type="button" class="status-btn btn-l ${status === 'late' ? 'active' : ''}" data-status="late" title="យឺត (Late)">L</button>
                 </div>
             `;
             monkListContainer.appendChild(card);
         });
 
-        monkListContainer.querySelectorAll('.single-box-btn').forEach(btn => {
+        monkListContainer.querySelectorAll('.status-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const boxBtn = e.currentTarget;
-                const wrapper = boxBtn.closest('.single-box-wrapper');
-                const studentId = wrapper.getAttribute('data-student-id');
+                const clickedBtn = e.currentTarget;
+                const group = clickedBtn.closest('.status-btn-group');
+                const studentId = group.getAttribute('data-student-id');
+                const targetStatus = clickedBtn.getAttribute('data-status');
                 const currentStatus = currentDailyState[studentId] || 'present';
 
-                const currentIndex = statusCycle.indexOf(currentStatus);
-                const nextStatus = statusCycle[(currentIndex + 1) % statusCycle.length];
+                // Toggle logic: if clicking already active status, revert to 'present'
+                const newStatus = (currentStatus === targetStatus) ? 'present' : targetStatus;
+                currentDailyState[studentId] = newStatus;
 
-                currentDailyState[studentId] = nextStatus;
-
-                // Update Box UI
-                boxBtn.className = `single-box-btn status-${nextStatus}`;
-                boxBtn.setAttribute('data-status', nextStatus);
-                boxBtn.innerHTML = renderSingleBoxContent(nextStatus);
+                // Update UI state for all 3 buttons in group
+                group.querySelectorAll('.status-btn').forEach(b => {
+                    if (b.getAttribute('data-status') === newStatus) {
+                        b.classList.add('active');
+                    } else {
+                        b.classList.remove('active');
+                    }
+                });
             });
         });
     }

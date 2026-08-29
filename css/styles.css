@@ -416,36 +416,26 @@ body {
     gap: 6px;
 }
 
-.single-box-demo {
+.demo-present-indicator {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 26px;
     height: 26px;
     border-radius: 6px;
-    font-weight: bold;
-    font-size: 0.85rem;
-}
-
-.demo-present {
-    background: rgba(0, 0, 0, 0.5);
-    border: 1px solid var(--status-present);
+    border: 1px dashed var(--status-present);
     color: var(--status-present);
+    font-weight: bold;
+    font-size: 0.9rem;
 }
 
-.demo-absent {
-    background: var(--status-absent);
-    color: #fff;
-}
-
-.demo-leave {
-    background: var(--status-leave);
-    color: #120a07;
-}
-
-.demo-late {
-    background: var(--status-late);
-    color: #fff;
+.demo-btn {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 0.88rem !important;
+    border-radius: 6px !important;
+    pointer-events: none;
+    transform: none !important;
 }
 
 /* Control Row & Filters */
@@ -711,65 +701,83 @@ body {
     color: var(--text-muted);
 }
 
-/* 1 Single Status Box per Monk System */
-.single-box-wrapper {
+/* 3 Status Buttons per Monk System (P, A, L) */
+.status-btn-group {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    gap: 8px;
 }
 
-.single-box-btn {
-    width: 44px;
-    height: 44px;
+.status-btn {
+    width: 42px;
+    height: 42px;
     border-radius: 10px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: var(--font-body);
-    font-weight: bold;
-    font-size: 1.15rem;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 800;
+    font-size: 1.1rem;
+    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
     outline: none;
-    border: 2px solid transparent;
+    background: rgba(10, 5, 3, 0.75);
+    border: 1px solid rgba(212, 175, 55, 0.28);
+    color: var(--text-muted);
+    user-select: none;
 }
 
-.single-box-btn:active {
-    transform: scale(0.92);
+.status-btn:hover {
+    transform: translateY(-2px);
 }
 
-/* State 1: Present (Default Empty/✓) */
-.single-box-btn.status-present {
-    background: rgba(0, 0, 0, 0.45);
-    border-color: var(--status-present);
-    color: var(--status-present);
-}
-.single-box-btn.status-present:hover {
-    box-shadow: 0 0 12px rgba(46, 204, 113, 0.4);
+/* P Button (ច្បាប់ / Leave) */
+.status-btn.btn-p:hover {
+    border-color: var(--status-leave);
+    color: var(--status-leave);
+    background: rgba(243, 156, 18, 0.15);
 }
 
-/* State 2: Absent (Red A) */
-.single-box-btn.status-absent {
-    background: var(--status-absent);
+.status-btn.btn-p.active {
+    background: linear-gradient(135deg, #f39c12, #f1c40f);
+    border-color: #f1c40f;
+    color: #120a07;
+    box-shadow: 0 0 14px rgba(243, 156, 18, 0.7);
+    transform: scale(1.05);
+}
+
+/* A Button (អវត្តមាន / Absent) */
+.status-btn.btn-a:hover {
+    border-color: var(--status-absent);
+    color: var(--status-absent);
+    background: rgba(231, 76, 60, 0.15);
+}
+
+.status-btn.btn-a.active {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
     border-color: #ff6b6b;
     color: #ffffff;
-    box-shadow: 0 0 14px rgba(231, 76, 60, 0.6);
+    box-shadow: 0 0 14px rgba(231, 76, 60, 0.7);
+    transform: scale(1.05);
 }
 
-/* State 3: Leave (Yellow/Gold P) */
-.single-box-btn.status-leave {
-    background: var(--status-leave);
-    border-color: var(--gold-bright);
-    color: #120a07;
-    box-shadow: 0 0 14px rgba(243, 156, 18, 0.6);
+/* L Button (យឺត / Late) */
+.status-btn.btn-l:hover {
+    border-color: var(--status-late);
+    color: var(--status-late);
+    background: rgba(230, 126, 34, 0.15);
 }
 
-/* State 4: Late (Orange L) */
-.single-box-btn.status-late {
-    background: var(--status-late);
+.status-btn.btn-l.active {
+    background: linear-gradient(135deg, #e67e22, #d35400);
     border-color: #ff9f43;
     color: #ffffff;
-    box-shadow: 0 0 14px rgba(230, 126, 34, 0.6);
+    box-shadow: 0 0 14px rgba(230, 126, 34, 0.7);
+    transform: scale(1.05);
+}
+
+.status-btn:active {
+    transform: scale(0.94);
 }
 
 .box-badge {
