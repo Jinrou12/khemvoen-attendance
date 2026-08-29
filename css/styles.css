@@ -701,16 +701,17 @@ body {
     color: var(--text-muted);
 }
 
-/* 3 Status Buttons per Monk System (P, A, L) */
-.status-btn-group {
+/* 1 Single Box per Monk System + Popover Selector */
+.single-box-wrapper {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: flex-end;
 }
 
-.status-btn {
-    width: 42px;
-    height: 42px;
+.single-box-btn {
+    width: 44px;
+    height: 44px;
     border-radius: 10px;
     cursor: pointer;
     display: flex;
@@ -718,66 +719,128 @@ body {
     justify-content: center;
     font-family: var(--font-body);
     font-weight: 800;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
     outline: none;
-    background: rgba(10, 5, 3, 0.75);
-    border: 1px solid rgba(212, 175, 55, 0.28);
-    color: var(--text-muted);
+    border: 2px solid transparent;
     user-select: none;
 }
 
-.status-btn:hover {
-    transform: translateY(-2px);
+.single-box-btn:hover {
+    transform: scale(1.06);
 }
 
-/* P Button (ច្បាប់ / Leave) */
-.status-btn.btn-p:hover {
-    border-color: var(--status-leave);
-    color: var(--status-leave);
-    background: rgba(243, 156, 18, 0.15);
+.single-box-btn:active {
+    transform: scale(0.94);
 }
 
-.status-btn.btn-p.active {
+/* State 1: Present (Default Empty Box with Green Border) */
+.single-box-btn.status-present {
+    background: rgba(0, 0, 0, 0.45);
+    border-color: var(--status-present);
+    color: var(--status-present);
+}
+.single-box-btn.status-present:hover {
+    box-shadow: 0 0 12px rgba(46, 204, 113, 0.4);
+}
+
+/* State 2: Absent (Red A) */
+.single-box-btn.status-absent {
+    background: var(--status-absent);
+    border-color: #ff6b6b;
+    color: #ffffff;
+    box-shadow: 0 0 14px rgba(231, 76, 60, 0.65);
+}
+
+/* State 3: Leave (Yellow/Gold P) */
+.single-box-btn.status-leave {
+    background: var(--status-leave);
+    border-color: var(--gold-bright);
+    color: #120a07;
+    box-shadow: 0 0 14px rgba(243, 156, 18, 0.65);
+}
+
+/* State 4: Late (Orange L) */
+.single-box-btn.status-late {
+    background: var(--status-late);
+    border-color: #ff9f43;
+    color: #ffffff;
+    box-shadow: 0 0 14px rgba(230, 126, 34, 0.65);
+}
+
+/* Status Popover Menu */
+.status-popover {
+    position: absolute;
+    right: 52px;
+    top: 50%;
+    transform: translateY(-50%) scale(0.85);
+    display: none;
+    align-items: center;
+    gap: 6px;
+    background: rgba(12, 6, 4, 0.96);
+    border: 1px solid var(--border-gold);
+    border-radius: 12px;
+    padding: 6px 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(14px);
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+}
+
+.single-box-wrapper.popover-open .status-popover {
+    display: flex;
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+}
+
+.popover-btn {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    background: rgba(20, 10, 6, 0.85);
+    color: var(--text-muted);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    user-select: none;
+}
+
+.popover-btn:hover {
+    transform: translateY(-1px);
+}
+
+.popover-btn.btn-present:hover, .popover-btn.btn-present.active {
+    background: rgba(46, 204, 113, 0.2);
+    border-color: var(--status-present);
+    color: var(--status-present);
+}
+
+.popover-btn.btn-p:hover, .popover-btn.btn-p.active {
     background: linear-gradient(135deg, #f39c12, #f1c40f);
     border-color: #f1c40f;
     color: #120a07;
-    box-shadow: 0 0 14px rgba(243, 156, 18, 0.7);
-    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(243, 156, 18, 0.5);
 }
 
-/* A Button (អវត្តមាន / Absent) */
-.status-btn.btn-a:hover {
-    border-color: var(--status-absent);
-    color: var(--status-absent);
-    background: rgba(231, 76, 60, 0.15);
-}
-
-.status-btn.btn-a.active {
+.popover-btn.btn-a:hover, .popover-btn.btn-a.active {
     background: linear-gradient(135deg, #e74c3c, #c0392b);
     border-color: #ff6b6b;
     color: #ffffff;
-    box-shadow: 0 0 14px rgba(231, 76, 60, 0.7);
-    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
 }
 
-/* L Button (យឺត / Late) */
-.status-btn.btn-l:hover {
-    border-color: var(--status-late);
-    color: var(--status-late);
-    background: rgba(230, 126, 34, 0.15);
-}
-
-.status-btn.btn-l.active {
+.popover-btn.btn-l:hover, .popover-btn.btn-l.active {
     background: linear-gradient(135deg, #e67e22, #d35400);
     border-color: #ff9f43;
     color: #ffffff;
-    box-shadow: 0 0 14px rgba(230, 126, 34, 0.7);
-    transform: scale(1.05);
-}
-
-.status-btn:active {
-    transform: scale(0.94);
+    box-shadow: 0 0 10px rgba(230, 126, 34, 0.5);
 }
 
 .box-badge {

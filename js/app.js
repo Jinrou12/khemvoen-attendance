@@ -169,6 +169,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------------------------------------------------
     let currentDailyState = {};
 
+    function renderSingleBoxContent(status) {
+        if (status === 'absent') return '<span class="box-badge text-a">A</span>';
+        if (status === 'leave') return '<span class="box-badge text-p">P</span>';
+        if (status === 'late') return '<span class="box-badge text-l">L</span>';
+        return ''; // Empty Box for Present / ได้មក
+    }
+
     function loadDailyAttendance() {
         const date = attendanceDateInput.value;
         const classId = parseInt(dailyClassSelect ? dailyClassSelect.value : 1);
@@ -195,38 +202,85 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="monk-sub">${student.title} • ID: ${student.id}</div>
                     </div>
                 </div>
-                <div class="status-btn-group" data-student-id="${student.id}">
-                    <button type="button" class="status-btn btn-p ${status === 'leave' ? 'active' : ''}" data-status="leave" title="ច្បាប់ (Leave)">P</button>
-                    <button type="button" class="status-btn btn-a ${status === 'absent' ? 'active' : ''}" data-status="absent" title="អវត្តមាន (Absent)">A</button>
-                    <button type="button" class="status-btn btn-l ${status === 'late' ? 'active' : ''}" data-status="late" title="យឺត (Late)">L</button>
+                <div class="single-box-wrapper" data-student-id="${student.id}">
+                    <button type="button" class="single-box-btn status-${status}" data-status="${status}" title="ចុចដើម្បីជ្រើសរើសអវត្តមាន (P, A, L)">
+                        ${renderSingleBoxContent(status)}
+                    </button>
+                    <div class="status-popover">
+                        <button type="button" class="popover-btn btn-present ${status === 'present' ? 'active' : ''}" data-status="present" title="បានមក (Present)">
+                            ✓ វត្តមាន
+                        </button>
+                        <button type="button" class="popover-btn btn-p ${status === 'leave' ? 'active' : ''}" data-status="leave" title="ច្បាប់ (Leave)">
+                            P ច្បាប់
+                        </button>
+                        <button type="button" class="popover-btn btn-a ${status === 'absent' ? 'active' : ''}" data-status="absent" title="អវត្តមាន (Absent)">
+                            A អវត្តមាន
+                        </button>
+                        <button type="button" class="popover-btn btn-l ${status === 'late' ? 'active' : ''}" data-status="late" title="យឺត (Late)">
+                            L យឺត
+                        </button>
+                    </div>
                 </div>
             `;
             monkListContainer.appendChild(card);
         });
 
-        monkListContainer.querySelectorAll('.status-btn').forEach(btn => {
+        // Toggle popover menu on clicking the student's 1 box
+        monkListContainer.querySelectorAll('.single-box-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const wrapper = e.currentTarget.closest('.single-box-wrapper');
+                const isAlreadyOpen = wrapper.classList.contains('popover-open');
+
+                // Close any other open popovers
+                document.querySelectorAll('.single-box-wrapper.popover-open').forEach(w => {
+                    w.classList.remove('popover-open');
+                });
+
+                if (!isAlreadyOpen) {
+                    wrapper.classList.add('popover-open');
+                }
+            });
+        });
+
+        // Handle button selection inside popover (P, A, L, វត្តមាន)
+        monkListContainer.querySelectorAll('.popover-btn').forEach(popoverBtn => {
+            popoverBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
                 const clickedBtn = e.currentTarget;
-                const group = clickedBtn.closest('.status-btn-group');
-                const studentId = group.getAttribute('data-student-id');
-                const targetStatus = clickedBtn.getAttribute('data-status');
-                const currentStatus = currentDailyState[studentId] || 'present';
+                const wrapper = clickedBtn.closest('.single-box-wrapper');
+                const studentId = wrapper.getAttribute('data-student-id');
+                const selectedStatus = clickedBtn.getAttribute('data-status');
 
-                // Toggle logic: if clicking already active status, revert to 'present'
-                const newStatus = (currentStatus === targetStatus) ? 'present' : targetStatus;
-                currentDailyState[studentId] = newStatus;
+                currentDailyState[studentId] = selectedStatus;
 
-                // Update UI state for all 3 buttons in group
-                group.querySelectorAll('.status-btn').forEach(b => {
-                    if (b.getAttribute('data-status') === newStatus) {
+                // Update single box UI
+                const boxBtn = wrapper.querySelector('.single-box-btn');
+                boxBtn.className = `single-box-btn status-${selectedStatus}`;
+                boxBtn.setAttribute('data-status', selectedStatus);
+                boxBtn.innerHTML = renderSingleBoxContent(selectedStatus);
+
+                // Update active state in popover buttons
+                wrapper.querySelectorAll('.popover-btn').forEach(b => {
+                    if (b.getAttribute('data-status') === selectedStatus) {
                         b.classList.add('active');
                     } else {
                         b.classList.remove('active');
                     }
                 });
+
+                // Close popover after selection
+                wrapper.classList.remove('popover-open');
             });
         });
     }
+
+    // Close any open popover when clicking anywhere else on document
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.single-box-wrapper.popover-open').forEach(w => {
+            w.classList.remove('popover-open');
+        });
+    });
 
     if (attendanceDateInput) attendanceDateInput.addEventListener('change', loadDailyAttendance);
 
