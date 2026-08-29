@@ -299,19 +299,48 @@ body {
     padding: 2px 10px;
 }
 
-.date-icon {
-    font-size: 0.9rem;
+.date-nav-arrow-btn {
+    background: transparent;
+    border: none;
+    color: var(--gold-primary);
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
 }
 
-.date-picker-input {
-    border: none !important;
-    background: transparent !important;
-    padding: 6px 2px !important;
-    font-size: 0.9rem !important;
-    width: auto !important;
-    color: var(--text-primary);
-    outline: none !important;
-    box-shadow: none !important;
+.date-nav-arrow-btn:hover {
+    background: rgba(212, 175, 55, 0.2);
+    color: var(--gold-bright);
+    transform: scale(1.15);
+}
+
+.date-switch-btn-group {
+    display: flex;
+    gap: 6px;
+    width: 100%;
+}
+
+.date-shift-btn {
+    flex: 1;
+    padding: 8px 4px !important;
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    white-space: nowrap !important;
+    text-align: center;
+    border-radius: 8px !important;
+    background: rgba(10, 5, 3, 0.85) !important;
+    border: 1px solid var(--border-gold) !important;
+    color: var(--text-gold) !important;
+    transition: all 0.25s ease !important;
+}
+
+.date-shift-btn:hover {
+    background: linear-gradient(135deg, var(--gold-primary), var(--saffron-main)) !important;
+    color: #120a07 !important;
+    border-color: var(--gold-bright) !important;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.35) !important;
 }
 
 #btn-session-switch {

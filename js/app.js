@@ -24,6 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Tab 1 Elements (Monthly Report)
     const monthlyClassSelect = document.getElementById('monthly-class-select');
     const monthlyDatePicker = document.getElementById('monthly-date-picker');
+    const btnMonthlyPrevMonth = document.getElementById('btn-monthly-prev-month');
+    const btnMonthlyNextMonth = document.getElementById('btn-monthly-next-month');
+    const btnMonthlyPrevDay = document.getElementById('btn-monthly-prev-day');
+    const btnMonthlyNextDay = document.getElementById('btn-monthly-next-day');
+    const btnDailyPrevDay = document.getElementById('btn-daily-prev-day');
+    const btnDailyNextDay = document.getElementById('btn-daily-next-day');
     const btnFilterMonthly = document.getElementById('btn-filter-monthly');
     const btnExportExcel = document.getElementById('btn-export-excel');
     const btnPrintReport = document.getElementById('btn-print-report');
@@ -46,6 +52,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Status Cycle Sequence for 1 Single Box: Present (Completely Empty Box) -> Absent (A) -> Leave (P) -> Late (L) -> Present
     const statusCycle = ['present', 'absent', 'leave', 'late'];
+
+    function shiftDate(dateStr, days = 0, months = 0) {
+        const baseDate = dateStr ? new Date(dateStr) : new Date();
+        if (days !== 0) baseDate.setDate(baseDate.getDate() + days);
+        if (months !== 0) baseDate.setMonth(baseDate.getMonth() + months);
+        const y = baseDate.getFullYear();
+        const m = String(baseDate.getMonth() + 1).padStart(2, '0');
+        const d = String(baseDate.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+    }
 
     // Set Default Dates to Today
     const todayStr = new Date().toISOString().split('T')[0];
@@ -359,6 +375,57 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (btnFilterMonthly) btnFilterMonthly.addEventListener('click', renderMonthlyReport);
     if (monthlyDatePicker) monthlyDatePicker.addEventListener('change', renderMonthlyReport);
+
+    if (btnMonthlyPrevMonth) {
+        btnMonthlyPrevMonth.addEventListener('click', () => {
+            if (monthlyDatePicker) {
+                monthlyDatePicker.value = shiftDate(monthlyDatePicker.value, 0, -1);
+                renderMonthlyReport();
+            }
+        });
+    }
+    if (btnMonthlyNextMonth) {
+        btnMonthlyNextMonth.addEventListener('click', () => {
+            if (monthlyDatePicker) {
+                monthlyDatePicker.value = shiftDate(monthlyDatePicker.value, 0, 1);
+                renderMonthlyReport();
+            }
+        });
+    }
+    if (btnMonthlyPrevDay) {
+        btnMonthlyPrevDay.addEventListener('click', () => {
+            if (monthlyDatePicker) {
+                monthlyDatePicker.value = shiftDate(monthlyDatePicker.value, -1, 0);
+                renderMonthlyReport();
+            }
+        });
+    }
+    if (btnMonthlyNextDay) {
+        btnMonthlyNextDay.addEventListener('click', () => {
+            if (monthlyDatePicker) {
+                monthlyDatePicker.value = shiftDate(monthlyDatePicker.value, 1, 0);
+                renderMonthlyReport();
+            }
+        });
+    }
+
+    if (btnDailyPrevDay) {
+        btnDailyPrevDay.addEventListener('click', () => {
+            if (attendanceDateInput) {
+                attendanceDateInput.value = shiftDate(attendanceDateInput.value, -1, 0);
+                loadDailyAttendance();
+            }
+        });
+    }
+    if (btnDailyNextDay) {
+        btnDailyNextDay.addEventListener('click', () => {
+            if (attendanceDateInput) {
+                attendanceDateInput.value = shiftDate(attendanceDateInput.value, 1, 0);
+                loadDailyAttendance();
+            }
+        });
+    }
+
     if (btnExportExcel) {
         btnExportExcel.addEventListener('click', () => {
             const dVal = monthlyDatePicker ? monthlyDatePicker.value : todayStr;
