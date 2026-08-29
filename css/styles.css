@@ -644,43 +644,44 @@ body {
 /* KPI Summary Cards Grid */
 .kpi-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
     margin-bottom: 20px;
 }
 
 .kpi-card {
     background: rgba(15, 8, 5, 0.85);
     border: 1px solid var(--border-gold);
-    border-radius: 12px;
-    padding: 14px;
+    border-radius: 10px;
+    padding: 10px 6px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    justify-content: center;
+    gap: 6px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    text-align: center;
 }
 
 .kpi-icon {
-    font-size: 1.8rem;
+    font-size: 1.1rem;
     line-height: 1;
 }
 
 .kpi-value {
-    font-size: 1.3rem;
+    font-size: 1.15rem;
     font-weight: 800;
     color: var(--gold-bright);
     font-family: var(--font-title);
 }
 
 .kpi-label {
-    font-size: 0.82rem;
-    color: var(--text-muted);
+    display: none;
 }
 
-.kpi-present { border-left: 4px solid var(--status-present); }
-.kpi-leave { border-left: 4px solid var(--status-leave); }
-.kpi-absent { border-left: 4px solid var(--status-absent); }
-.kpi-late { border-left: 4px solid var(--status-late); }
+.kpi-present { border-left: 3px solid var(--status-present); }
+.kpi-leave { border-left: 3px solid var(--status-leave); }
+.kpi-absent { border-left: 3px solid var(--status-absent); }
+.kpi-late { border-left: 3px solid var(--status-late); }
 
 /* Student Attendance Statistics Cards Grid */
 .student-stats-grid {

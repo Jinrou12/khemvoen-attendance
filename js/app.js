@@ -888,7 +888,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const grandTotalChecks = presentTotal + leaveTotal + absentTotal + lateTotal;
         const presentPercentage = grandTotalChecks > 0 ? Math.round((presentTotal / grandTotalChecks) * 100) : 100;
 
-        if (kpiPresent) kpiPresent.innerHTML = `${toKhmerNum(presentTotal)} (${toKhmerNum(presentPercentage)}%)`;
+        if (kpiPresent) kpiPresent.innerHTML = `${toKhmerNum(presentTotal)}`;
         if (kpiLeave) kpiLeave.innerHTML = `${toKhmerNum(leaveTotal)}`;
         if (kpiAbsent) kpiAbsent.innerHTML = `${toKhmerNum(absentTotal)}`;
         if (kpiLate) kpiLate.innerHTML = `${toKhmerNum(lateTotal)}`;
