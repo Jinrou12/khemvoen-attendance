@@ -466,6 +466,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnFilterMonthly) btnFilterMonthly.addEventListener('click', renderMonthlyReport);
     if (monthlyDatePicker) monthlyDatePicker.addEventListener('change', renderMonthlyReport);
 
+    // Initial render on page load
+    renderMonthlyReport();
+
     if (btnExportExcel) {
         btnExportExcel.addEventListener('click', () => {
             const dVal = monthlyDatePicker ? monthlyDatePicker.value : todayStr;

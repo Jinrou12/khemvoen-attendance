@@ -558,6 +558,8 @@ body {
 .form-control:focus {
     border-color: var(--gold-bright);
     box-shadow: 0 0 10px rgba(255, 215, 0, 0.35);
+}
+
 /* View Mode Switcher (Single Day vs Full Month) */
 .btn-view-mode {
     background: transparent;
