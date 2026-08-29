@@ -70,6 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const timeLabel = session === 'morning' ? '☀️ វេនព្រឹក (០៧:០០ - ០៩:០០)' : '🌙 វេនល្ងាច (១៧:០០ - ១៩:០០)';
             autoSessionText.innerHTML = isAuto ? `ស្វ័យប្រវត្តិ៖ <strong>${timeLabel}</strong>` : `ជ្រើសរើស៖ <strong>${timeLabel}</strong>`;
         }
+        if (btnMarkAllPresent) {
+            btnMarkAllPresent.innerHTML = session === 'morning' ? '☀️ វេនព្រឹក (០៧:០០ - ០៩:០០)' : '🌙 វេនល្ងាច (១៧:០០ - ១៩:០០)';
+        }
     }
 
     if (sessionToggle) {
