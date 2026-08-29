@@ -1123,6 +1123,60 @@ body {
     text-align: center;
 }
 
+/* Auto-Fit Mode: Fits all 31 days from Day 1 to Day 31 on 100% mobile screen width */
+.buddhist-table.table-fit-all-days {
+    min-width: 100% !important;
+    width: 100% !important;
+    font-size: 0.65rem !important;
+    table-layout: fixed !important;
+}
+
+.buddhist-table.table-fit-all-days .col-no {
+    width: 22px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+    padding: 3px 0 !important;
+    font-size: 0.62rem !important;
+}
+
+.buddhist-table.table-fit-all-days .col-name {
+    min-width: 65px !important;
+    max-width: 75px !important;
+    padding: 3px 2px !important;
+    font-size: 0.65rem !important;
+}
+
+.buddhist-table.table-fit-all-days th:nth-child(1),
+.buddhist-table.table-fit-all-days td:nth-child(1) {
+    left: 0 !important;
+}
+
+.buddhist-table.table-fit-all-days th:nth-child(2),
+.buddhist-table.table-fit-all-days td:nth-child(2) {
+    left: 22px !important;
+}
+
+.buddhist-table.table-fit-all-days .col-day {
+    width: auto !important;
+    min-width: 0 !important;
+    padding: 3px 0 !important;
+    font-size: 0.58rem !important;
+}
+
+.buddhist-table.table-fit-all-days .col-summary {
+    width: 16px !important;
+    min-width: 16px !important;
+    padding: 3px 0 !important;
+    font-size: 0.58rem !important;
+}
+
+.buddhist-table.table-fit-all-days .cell-badge {
+    width: 14px !important;
+    height: 14px !important;
+    font-size: 0.55rem !important;
+    border-radius: 3px !important;
+}
+
 .buddhist-table th {
     background: rgba(35, 18, 12, 0.98);
     color: var(--gold-bright);

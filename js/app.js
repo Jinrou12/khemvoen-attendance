@@ -593,6 +593,57 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Zoom & Auto-Fit Controls (✨ សម្រួលបង្ហាញ ៣១ ថ្ងៃ, 🔍+ ពង្រីក, 🔍- បង្រួម, ↺ ទំហំដើម)
+    const btnZoomFitAll = document.getElementById('btn-zoom-fit-all');
+    const btnZoomOut = document.getElementById('btn-zoom-out');
+    const btnZoomIn = document.getElementById('btn-zoom-in');
+    const btnZoomReset = document.getElementById('btn-zoom-reset');
+    const buddhistTable = document.querySelector('.buddhist-table');
+
+    let currentZoomScale = 1.0;
+
+    if (btnZoomFitAll && buddhistTable) {
+        btnZoomFitAll.addEventListener('click', () => {
+            buddhistTable.classList.toggle('table-fit-all-days');
+            const isFit = buddhistTable.classList.contains('table-fit-all-days');
+            if (isFit) {
+                buddhistTable.style.zoom = '';
+                buddhistTable.style.transform = '';
+                showToast('✨ បានសម្រួលបង្ហាញ ៣១ ថ្ងៃ ពេញអេក្រង់!');
+            } else {
+                showToast('ត្រឡប់មកទំហំធម្មតាវិញ');
+            }
+        });
+    }
+
+    if (btnZoomOut && buddhistTable) {
+        btnZoomOut.addEventListener('click', () => {
+            buddhistTable.classList.remove('table-fit-all-days');
+            currentZoomScale = Math.max(0.4, currentZoomScale - 0.1);
+            buddhistTable.style.zoom = currentZoomScale;
+            showToast(`🔍- បង្រួមទំហំនៅត្រឹម ${Math.round(currentZoomScale * 100)}%`);
+        });
+    }
+
+    if (btnZoomIn && buddhistTable) {
+        btnZoomIn.addEventListener('click', () => {
+            buddhistTable.classList.remove('table-fit-all-days');
+            currentZoomScale = Math.min(1.8, currentZoomScale + 0.1);
+            buddhistTable.style.zoom = currentZoomScale;
+            showToast(`🔍+ ពង្រីកទំហំដល់ ${Math.round(currentZoomScale * 100)}%`);
+        });
+    }
+
+    if (btnZoomReset && buddhistTable) {
+        btnZoomReset.addEventListener('click', () => {
+            buddhistTable.classList.remove('table-fit-all-days');
+            currentZoomScale = 1.0;
+            buddhistTable.style.zoom = '1.0';
+            buddhistTable.style.transform = '';
+            showToast('↺ បានកំណត់មកទំហំដើម (100%)');
+        });
+    }
+
     // Initial render on page load
     renderMonthlyReport();
 
