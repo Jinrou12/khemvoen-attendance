@@ -329,13 +329,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 let dayBadge = '-';
                 if (mStatus === 'absent' || eStatus === 'absent') {
-                    dayBadge = `<span class="cell-badge cell-a" title="អវត្តមាន">អ</span>`;
+                    dayBadge = `<span class="cell-badge cell-a" title="អវត្តមាន (Absent)">A</span>`;
                 } else if (mStatus === 'leave' || eStatus === 'leave') {
-                    dayBadge = `<span class="cell-badge cell-l" title="ច្បាប់">ច</span>`;
+                    dayBadge = `<span class="cell-badge cell-p" title="ច្បាប់ (Permission)">P</span>`;
                 } else if (mStatus === 'late' || eStatus === 'late') {
-                    dayBadge = `<span class="cell-badge cell-t" title="យឺត">យ</span>`;
+                    dayBadge = `<span class="cell-badge cell-l" title="យឺត (Late)">L</span>`;
                 } else if (mStatus === 'present' || eStatus === 'present') {
-                    dayBadge = `<span class="cell-badge cell-p" title="វត្តមាន">វ</span>`;
+                    dayBadge = `-`;
                 }
 
                 rowDaysHTML += `<td>${dayBadge}</td>`;

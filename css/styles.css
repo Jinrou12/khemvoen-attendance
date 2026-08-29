@@ -991,18 +991,19 @@ body {
 
 /* Status Badges in Table */
 .cell-badge {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    line-height: 20px;
-    border-radius: 50%;
-    font-size: 0.72rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    font-size: 0.78rem;
     font-weight: bold;
+    font-family: var(--font-body);
 }
-.cell-p { background: var(--status-present-bg); color: var(--status-present); border: 1px solid var(--status-present); }
-.cell-l { background: var(--status-leave-bg); color: var(--status-leave); border: 1px solid var(--status-leave); }
-.cell-a { background: var(--status-absent-bg); color: var(--status-absent); border: 1px solid var(--status-absent); }
-.cell-t { background: var(--status-late-bg); color: var(--status-late); border: 1px solid var(--status-late); }
+.cell-a { background: linear-gradient(135deg, #d32f2f, #b71c1c); color: #ffffff; border: 1px solid #ff5252; box-shadow: 0 2px 6px rgba(211, 47, 47, 0.4); }
+.cell-p { background: linear-gradient(135deg, #f57f17, #e65100); color: #ffffff; border: 1px solid #ffb74d; box-shadow: 0 2px 6px rgba(245, 127, 23, 0.4); }
+.cell-l { background: linear-gradient(135deg, #e65100, #bf360c); color: #ffffff; border: 1px solid #ff9800; box-shadow: 0 2px 6px rgba(230, 81, 0, 0.4); }
 
 /* Toast Notifications */
 .toast-container {
