@@ -67,3 +67,44 @@ function setStoredData(key, data) {
         console.error('LocalStorage write error:', e);
     }
 }
+
+function generateSampleAttendance(studentsList) {
+    const records = {};
+    const today = new Date();
+    const year = today.getFullYear();
+    const monthStr = String(today.getMonth() + 1).padStart(2, '0');
+    const daysInMonth = new Date(year, today.getMonth() + 1, 0).getDate();
+
+    for (let d = 1; d <= Math.min(daysInMonth, 29); d++) {
+        const dayStr = String(d).padStart(2, '0');
+        const dateKey = `${year}-${monthStr}-${dayStr}`;
+
+        for (let classId = 1; classId <= 15; classId++) {
+            const classStudents = studentsList.filter(s => s.classId === classId);
+            const mKey = `${dateKey}_morning_class_${classId}`;
+            const eKey = `${dateKey}_evening_class_${classId}`;
+
+            records[mKey] = {};
+            records[eKey] = {};
+
+            classStudents.forEach((student, idx) => {
+                const seedM = (d * 7 + student.number * 3 + classId * 5) % 15;
+                const seedE = (d * 11 + student.number * 2 + classId * 9) % 15;
+
+                let mSt = 'present';
+                let eSt = 'present';
+
+                if (seedM === 3) mSt = 'absent';
+                else if (seedM === 5) mSt = 'leave';
+                else if (seedM === 8) mSt = 'late';
+
+                if (seedE === 4) eSt = 'absent';
+                else if (seedE === 7) eSt = 'leave';
+
+                records[mKey][student.id] = mSt;
+                records[eKey][student.id] = eSt;
+            });
+        }
+    }
+    return records;
+}

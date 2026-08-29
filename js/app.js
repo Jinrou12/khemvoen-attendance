@@ -7,7 +7,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Initialize State & Data
     let classes = getStoredData('buddhist_classes', DEFAULT_CLASSES);
     let students = getStoredData('buddhist_students', generateInitialStudents());
-    let attendanceRecords = getStoredData('buddhist_attendance', {});
+    let attendanceRecords = getStoredData('buddhist_attendance', null);
+    if (!attendanceRecords || Object.keys(attendanceRecords).length === 0) {
+        attendanceRecords = generateSampleAttendance(students);
+        setStoredData('buddhist_attendance', attendanceRecords);
+    }
 
     // Cache DOM Elements
     const tabBtns = document.querySelectorAll('.tab-btn');
@@ -141,8 +145,13 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById(targetTab).classList.add('active');
 
             if (targetTab === 'tab-monthly') {
+                attendanceRecords = getStoredData('buddhist_attendance', {});
+                if (monthlyDatePicker && attendanceDateInput) {
+                    monthlyDatePicker.value = attendanceDateInput.value;
+                }
                 renderMonthlyReport();
             } else if (targetTab === 'tab-stats') {
+                attendanceRecords = getStoredData('buddhist_attendance', {});
                 renderStatisticsDashboard();
             } else if (targetTab === 'tab-daily') {
                 loadDailyAttendance();
@@ -266,6 +275,15 @@ document.addEventListener('DOMContentLoaded', () => {
             monkListContainer.appendChild(card);
         });
 
+        function autoSaveDailyState() {
+            const date = attendanceDateInput.value;
+            const classId = parseInt(dailyClassSelect ? dailyClassSelect.value : 1);
+            const session = currentSession;
+            const recordKey = `${date}_${session}_class_${classId}`;
+            attendanceRecords[recordKey] = { ...currentDailyState };
+            setStoredData('buddhist_attendance', attendanceRecords);
+        }
+
         // Click student's 1 box to apply active toolbar tool (or toggle back to present if already matching)
         monkListContainer.querySelectorAll('.single-box-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -282,6 +300,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 boxBtn.className = `single-box-btn status-${newStatus}`;
                 boxBtn.setAttribute('data-status', newStatus);
                 boxBtn.innerHTML = renderSingleBoxContent(newStatus);
+
+                // Auto-save instantly so Tab 1 & Tab 3 update in real time!
+                autoSaveDailyState();
             });
         });
     }
