@@ -103,30 +103,9 @@
                 <!-- Filters for Month, Year, and Class -->
                 <div class="controls-grid">
 
-                    <div class="form-group">
-                        <label for="monthly-month-select">🗓️ ជ្រើសរើសខែ</label>
-                        <select id="monthly-month-select" class="form-control">
-                            <option value="1">ខែមករា (Month 1)</option>
-                            <option value="2">ខែកុម្ភៈ (Month 2)</option>
-                            <option value="3">ខែមីនា (Month 3)</option>
-                            <option value="4">ខែមេសា (Month 4)</option>
-                            <option value="5">ខែឧសភា (Month 5)</option>
-                            <option value="6">ខែមិថុនា (Month 6)</option>
-                            <option value="7">ខែកក្កដា (Month 7)</option>
-                            <option value="8" selected>ខែសីហា (Month 8)</option>
-                            <option value="9">ខែកញ្ញា (Month 9)</option>
-                            <option value="10">ខែតុលា (Month 10)</option>
-                            <option value="11">ខែវិច្ឆិកា (Month 11)</option>
-                            <option value="12">ខែធ្នូ (Month 12)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="monthly-year-select">📆 ឆ្នាំ</label>
-                        <select id="monthly-year-select" class="form-control">
-                            <option value="2026" selected>២០២៦ (2026)</option>
-                            <option value="2025">២០២៥ (2025)</option>
-                            <option value="2027">២០២៧ (2027)</option>
-                        </select>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label for="monthly-month-picker">🗓️ ជ្រើសរើសខែ និងឆ្នាំ</label>
+                        <input type="month" id="monthly-month-picker" class="form-control" value="2026-08">
                     </div>
                 </div>
 

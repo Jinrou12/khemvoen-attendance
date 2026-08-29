@@ -23,8 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Tab 1 Elements (Monthly Report)
     const monthlyClassSelect = document.getElementById('monthly-class-select');
-    const monthlyMonthSelect = document.getElementById('monthly-month-select');
-    const monthlyYearSelect = document.getElementById('monthly-year-select');
+    const monthlyMonthPicker = document.getElementById('monthly-month-picker');
     const btnFilterMonthly = document.getElementById('btn-filter-monthly');
     const btnExportExcel = document.getElementById('btn-export-excel');
     const btnPrintReport = document.getElementById('btn-print-report');
@@ -50,8 +49,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Set Default Dates to Today
     const todayStr = new Date().toISOString().split('T')[0];
+    const currentMonthStr = todayStr.substring(0, 7);
     if (attendanceDateInput) attendanceDateInput.value = todayStr;
     if (statsDateSelect) statsDateSelect.value = todayStr;
+    if (monthlyMonthPicker) monthlyMonthPicker.value = currentMonthStr;
 
     // -------------------------------------------------------------
     // Smart Session Detection ( morning vs evening )
@@ -268,8 +269,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // TAB 1: Monthly Attendance Summary Report
     // -------------------------------------------------------------
     function renderMonthlyReport() {
-        const year = parseInt(monthlyYearSelect.value);
-        const month = parseInt(monthlyMonthSelect.value);
+        const monthVal = (monthlyMonthPicker && monthlyMonthPicker.value) ? monthlyMonthPicker.value : currentMonthStr;
+        const parts = monthVal.split('-');
+        const year = parseInt(parts[0] || '2026');
+        const month = parseInt(parts[1] || '8');
         const selectedClass = monthlyClassSelect ? monthlyClassSelect.value : 'all';
 
         const daysInMonth = new Date(year, month, 0).getDate();
@@ -360,9 +363,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (btnFilterMonthly) btnFilterMonthly.addEventListener('click', renderMonthlyReport);
+    if (monthlyMonthPicker) monthlyMonthPicker.addEventListener('change', renderMonthlyReport);
     if (btnExportExcel) {
         btnExportExcel.addEventListener('click', () => {
-            exportTableToCSV(`អវត្តមានថ្វាយបង្គំ_វត្តខេមរវ័ន_ខែ${monthlyMonthSelect.value}_ឆ្នាំ${monthlyYearSelect.value}.csv`);
+            const mVal = monthlyMonthPicker ? monthlyMonthPicker.value : currentMonthStr;
+            exportTableToCSV(`អវត្តមានថ្វាយបង្គំ_វត្តខេមរវ័ន_ខែ${mVal}.csv`);
         });
     }
     if (btnPrintReport) btnPrintReport.addEventListener('click', () => window.print());
