@@ -217,6 +217,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------------------------------------------------
     let currentDailyState = {};
     let activeAttendanceTool = 'absent';
+    let currentSession = 'morning'; // 'morning' or 'evening'
+
+    // Session Switcher Event Listener (☀️ វេនព្រឹក / 🌙 វេនល្ងាច)
+    if (btnSessionSwitch) {
+        btnSessionSwitch.addEventListener('click', () => {
+            if (currentSession === 'morning') {
+                currentSession = 'evening';
+                btnSessionSwitch.innerHTML = '🌙 វេនល្ងាច';
+                btnSessionSwitch.classList.remove('btn-primary');
+                btnSessionSwitch.classList.add('btn-secondary');
+                showToast('🌙 បានប្តូរទៅវេនល្ងាច');
+            } else {
+                currentSession = 'morning';
+                btnSessionSwitch.innerHTML = '☀️ វេនព្រឹក';
+                btnSessionSwitch.classList.remove('btn-secondary');
+                btnSessionSwitch.classList.add('btn-primary');
+                showToast('☀️ បានប្តូរទៅវេនព្រឹក');
+            }
+            loadDailyAttendance();
+        });
+    }
 
     // Toolbar Tool Selector Event Listeners
     document.querySelectorAll('.tool-select-btn').forEach(toolBtn => {
