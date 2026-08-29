@@ -453,27 +453,42 @@ document.addEventListener('DOMContentLoaded', () => {
             return '-';
         }
 
-        // Build Table Header
-        let headerHTML = `
-            <tr>
-                <th class="col-no">ល.រ</th>
-                <th class="col-name text-left">គោតនាម-នាម</th>
-        `;
+        // Build Table Header — 2 rows: day numbers + ☀️/🌙 sub-headers
+        let headerHTML = ``;
 
         if (monthlyReportViewMode === 'single') {
-            headerHTML += `
-                <th style="min-width: 75px;" title="វេនព្រឹក">☀️ ព្រឹក</th>
-                <th style="min-width: 75px;" title="វេនល្ងាច">🌙 ល្ងាច</th>
+            headerHTML = `
+                <tr>
+                    <th class="col-no" rowspan="2">ល.រ</th>
+                    <th class="col-name text-left" rowspan="2">គោតនាម-នាម</th>
+                    <th colspan="2" style="text-align:center; font-size:0.75rem;">ថ្ងៃទី ${toKhmerNum(selectedDay)}</th>
+                </tr>
+                <tr>
+                    <th style="min-width:32px; font-size:0.72rem;" title="វេនព្រឹក">☀️</th>
+                    <th style="min-width:32px; font-size:0.72rem;" title="វេនល្ងាច">🌙</th>
+                </tr>
             `;
         } else {
+            // Row 1: day numbers, each spanning 2 columns
+            let row1 = `<tr>
+                <th class="col-no" rowspan="2">ល.រ</th>
+                <th class="col-name text-left" rowspan="2">គោតនាម-នាម</th>`;
             daysToDisplay.forEach(d => {
-                headerHTML += `<th class="col-day">${toKhmerNum(d)}</th>`;
+                row1 += `<th class="col-day" colspan="2" style="text-align:center;">${toKhmerNum(d)}</th>`;
             });
+            row1 += `</tr>`;
+
+            // Row 2: ☀️ and 🌙 sub-header for each day
+            let row2 = `<tr>`;
+            daysToDisplay.forEach(() => {
+                row2 += `<th class="col-day" style="font-size:0.65rem; padding:1px; width:16px;" title="វេនព្រឹក">☀</th>`;
+                row2 += `<th class="col-day" style="font-size:0.65rem; padding:1px; width:16px;" title="វេនល្ងាច">🌙</th>`;
+            });
+            row2 += `</tr>`;
+
+            headerHTML = row1 + row2;
         }
 
-        headerHTML += `
-            </tr>
-        `;
         monthlyTableHeader.innerHTML = headerHTML;
 
         // Calculate student totals across full month for sorting & rendering
@@ -487,8 +502,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             for (let d = 1; d <= daysInMonth; d++) {
                 const dayStr = String(d).padStart(2, '0');
-                const monthStr = String(month).padStart(2, '0');
-                const dateKey = `${year}-${monthStr}-${dayStr}`;
+                const monthStr2 = String(month).padStart(2, '0');
+                const dateKey = `${year}-${monthStr2}-${dayStr}`;
 
                 const mKey = `${dateKey}_morning_class_${student.classId}`;
                 const eKey = `${dateKey}_evening_class_${student.classId}`;
@@ -508,17 +523,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (st === 'late') lateCount++;
                 });
 
-                let dayBadge = '-';
-                if (mStatus === 'absent' || eStatus === 'absent') {
-                    dayBadge = `<span class="cell-badge cell-a" title="អវត្តមាន (Absent)">A</span>`;
-                } else if (mStatus === 'leave' || eStatus === 'leave') {
-                    dayBadge = `<span class="cell-badge cell-p" title="ច្បាប់ (Permission)">P</span>`;
-                } else if (mStatus === 'late' || eStatus === 'late') {
-                    dayBadge = `<span class="cell-badge cell-l" title="យឺត (Late)">L</span>`;
-                } else if (mStatus === 'present' || eStatus === 'present') {
-                    dayBadge = `-`;
-                }
-                dayStatuses[d] = dayBadge;
+                // Store BOTH morning and evening separately per day
+                dayStatuses[d] = {
+                    morning: mStatus,
+                    evening: eStatus
+                };
             }
 
             return {
@@ -549,7 +558,7 @@ document.addEventListener('DOMContentLoaded', () => {
             studentDataList.sort((a, b) => b.lateCount - a.lateCount);
         }
 
-        // Build Table Body
+        // Build Table Body — 2 cells per day (morning + evening)
         let bodyHTML = '';
         studentDataList.forEach((item, idx) => {
             let rowDaysHTML = '';
@@ -560,7 +569,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
             } else {
                 daysToDisplay.forEach(d => {
-                    rowDaysHTML += `<td class="col-day">${item.dayStatuses[d] || '-'}</td>`;
+                    const ds = item.dayStatuses[d] || { morning: null, evening: null };
+                    rowDaysHTML += `<td class="col-day" style="padding:2px 1px;">${renderStatusBadge(ds.morning)}</td>`;
+                    rowDaysHTML += `<td class="col-day" style="padding:2px 1px; border-left:1px solid rgba(212,175,55,0.1);">${renderStatusBadge(ds.evening)}</td>`;
                 });
             }
 
