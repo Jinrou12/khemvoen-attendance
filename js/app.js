@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Tab 1 Elements (Monthly Report)
     const monthlyClassSelect = document.getElementById('monthly-class-select');
-    const monthlyMonthPicker = document.getElementById('monthly-month-picker');
+    const monthlyDatePicker = document.getElementById('monthly-date-picker');
     const btnFilterMonthly = document.getElementById('btn-filter-monthly');
     const btnExportExcel = document.getElementById('btn-export-excel');
     const btnPrintReport = document.getElementById('btn-print-report');
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentMonthStr = todayStr.substring(0, 7);
     if (attendanceDateInput) attendanceDateInput.value = todayStr;
     if (statsDateSelect) statsDateSelect.value = todayStr;
-    if (monthlyMonthPicker) monthlyMonthPicker.value = currentMonthStr;
+    if (monthlyDatePicker) monthlyDatePicker.value = todayStr;
 
     // -------------------------------------------------------------
     // Smart Session Detection ( morning vs evening )
@@ -268,8 +268,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // TAB 1: Monthly Attendance Summary Report
     // -------------------------------------------------------------
     function renderMonthlyReport() {
-        const monthVal = (monthlyMonthPicker && monthlyMonthPicker.value) ? monthlyMonthPicker.value : currentMonthStr;
-        const parts = monthVal.split('-');
+        const dateVal = (monthlyDatePicker && monthlyDatePicker.value) ? monthlyDatePicker.value : todayStr;
+        const parts = dateVal.split('-');
         const year = parseInt(parts[0] || '2026');
         const month = parseInt(parts[1] || '8');
         const selectedClass = monthlyClassSelect ? monthlyClassSelect.value : 'all';
@@ -362,11 +362,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (btnFilterMonthly) btnFilterMonthly.addEventListener('click', renderMonthlyReport);
-    if (monthlyMonthPicker) monthlyMonthPicker.addEventListener('change', renderMonthlyReport);
+    if (monthlyDatePicker) monthlyDatePicker.addEventListener('change', renderMonthlyReport);
     if (btnExportExcel) {
         btnExportExcel.addEventListener('click', () => {
-            const mVal = monthlyMonthPicker ? monthlyMonthPicker.value : currentMonthStr;
-            exportTableToCSV(`អវត្តមានថ្វាយបង្គំ_វត្តខេមរវ័ន_ខែ${mVal}.csv`);
+            const dVal = monthlyDatePicker ? monthlyDatePicker.value : todayStr;
+            exportTableToCSV(`អវត្តមានថ្វាយបង្គំ_វត្តខេមរវ័ន_កាលបរិច្ឆេទ${dVal}.csv`);
         });
     }
     if (btnPrintReport) btnPrintReport.addEventListener('click', () => window.print());
